@@ -9,3 +9,4 @@ class Banks(models.Model):
 	def __str__(self):
 		return "Name: {} - Country: {}".format(self.name, self.country)
 
+
