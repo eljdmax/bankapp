@@ -1,5 +1,3 @@
-> proper business api call (function)
-
-> add sample react.js code for frontend visualization
-
 > relational models with postgresql
+
+> modular urls/views design

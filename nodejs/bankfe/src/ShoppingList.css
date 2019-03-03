@@ -1,0 +1,11 @@
+.shopping-list {
+  text-align: left;
+  background-color: #182c34;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
