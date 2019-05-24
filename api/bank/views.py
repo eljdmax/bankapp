@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Banks
-from .serializers import BanksSerializer
+from .models import *
+from .serializers import *
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -16,6 +16,14 @@ class ListBanksView(generics.ListAPIView):
 	queryset = Banks.objects.all()
 	serializer_class = BanksSerializer
 
+class ListWeapons(generics.ListAPIView):
+	"""
+	Provides a get method handler.
+	"""
+	queryset = Weapon.objects.select_related('variant').all()
+	print(queryset)
+	serializer_class = WeaponSerializer
+	
 	
 class UtilsRest:
 	
@@ -28,3 +36,18 @@ class UtilsRest:
 			return JsonResponse(data, safe=False)
 			
 		
+		
+class GearsRest:
+
+	def getGear(request, version=None):
+		data = {'msg': 'in construction'}
+		return JsonResponse(data, safe=False)
+
+
+class WeaponsRest:
+
+	def getWeapon(request, version=None):
+		allWeapons = list(Weapon.objects.all())
+			
+		#data = {'msg': 'in construction'}
+		return JsonResponse(allWeapons, safe=False)

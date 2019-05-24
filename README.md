@@ -11,7 +11,12 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+Python 3
+mysql-connector-python (v8.0.5) https://dev.mysql.com/downloads/connector/python/ | http://mysql.mirror.ac.za/Downloads/Connector-Python/
+pip installDjango==2.0.3
+pip install djangorestframework
+pip install mysql-connector-python==8.0.5
+pip install django-cors-headers
 ```
 
 ### Installing

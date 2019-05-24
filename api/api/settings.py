@@ -110,12 +110,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('PG_NAME','entities'),
-        'USER': os.environ.get('PG_USER','bankapp'),
-        'PASSWORD': os.environ.get('PG_PASS','changeit'),
-        'HOST':     os.environ.get('PG_HOST','localhost'),
-        'PORT':     os.environ.get('PG_PORT','5432')
+        'ENGINE': 'mysql.connector.django',
+        'NAME': os.environ.get('MY_NAME','world'),
+        'USER': os.environ.get('MY_USER','root'),
+        'PASSWORD': os.environ.get('MY_PASS','admin'),
+        'HOST':     os.environ.get('MY_HOST','localhost'),
+        'PORT':     os.environ.get('MY_PORT','3306')
     }
 }
 
