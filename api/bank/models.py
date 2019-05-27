@@ -1,15 +1,5 @@
 from django.db import models
 
-class Banks(models.Model):
-	# bank name
-	name = models.CharField(max_length=255, null=False)
-	# bank country
-	country = models.CharField(max_length=255, null=False)
-	
-	def __str__(self):
-		return "Name: {} - Country: {}".format(self.name, self.country)
-
-
 
 ## Weapons
 class WeaponFamily(models.Model):
@@ -69,7 +59,7 @@ class Weapon(models.Model):
 	# weapon variant
 	variant = models.ForeignKey(WeaponVariant, on_delete=models.CASCADE, null=False)
 	# active talent
-	activeTalent = models.ForeignKey(ActiveWeaponTalent, on_delete=models.CASCADE, null=True)
+	activeTalent = models.ForeignKey(ActiveWeaponTalent, on_delete=models.CASCADE, null=True, blank = True)
 	# passive talent
 	passiveTalents = models.ManyToManyField(
         PassiveWeaponTalent,
@@ -161,7 +151,7 @@ class Gear(models.Model):
 	# gear family
 	family = models.ForeignKey(GearFamily, on_delete=models.CASCADE, null=False)
 	# active talent
-	activeTalent = models.ForeignKey(ActiveGearTalent, on_delete=models.CASCADE, null=True)
+	activeTalent = models.ForeignKey(ActiveGearTalent, on_delete=models.CASCADE, null=True, blank = True)
 	# passive talent
 	passiveTalents = models.ManyToManyField(
         PassiveGearTalent,

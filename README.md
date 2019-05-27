@@ -12,8 +12,8 @@ What things you need to install the software and how to install them
 
 ```
 Python 3
-mysql-connector-python (v8.0.5) https://dev.mysql.com/downloads/connector/python/ | http://mysql.mirror.ac.za/Downloads/Connector-Python/
-pip installDjango==2.0.3
+mysql-connector-python (v8.0.5) https://dev.mysql.com/downloads/connector/python/ | http://mysql.mirror.ac.za/Downloads/Connector-Python/mysql-connector-python-8.0.5-dmr-py3.5-windows-x86-64bit.msi
+pip install Django==2.0.3
 pip install djangorestframework
 pip install mysql-connector-python==8.0.5
 pip install django-cors-headers
