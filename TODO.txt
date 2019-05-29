@@ -1,3 +1,5 @@
 > relational models with postgresql
 
 > modular urls/views design
+
+https://imgur.com/a/eO6IrWx
