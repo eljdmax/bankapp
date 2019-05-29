@@ -27,7 +27,8 @@ export const WeaponComponent = (props: Props) => {
       <h3>{weapon.score}</h3>
       <p>{weapon.id}</p>
       <p>{weapon.dmg}</p>
-      <p>{weapon.variant}</p>
+      <p>{weapon.variant.name}</p>
+	  <p>{weaponUiService.displayActiveTalent(weapon.activeTalent)}</p>
       <p>{weaponUiService.displayTrash(weapon.trash)}</p>
 	  <button
         type="button"

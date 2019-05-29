@@ -10,30 +10,30 @@ export type WeaponFields = {
   +id: number;
   +score: number;
   +dmg: number;
-  +variant: string;
+  +variant: number;
 }
 
 
 export type WeaponService = {
-  createWeapon(weaponFields: WeaponFields): ?Weapon;
+  createWeapon(weaponFields: any): ?Weapon;
   updateTrash(weapon: Weapon, trash: boolean): Weapon;
-  setId(weapon:Weapon, id: number): Weapon;
   isIdValid(id: number): boolean;
   isScoreValid(score: number): boolean;
   isDmgValid(dmg: number): boolean;
-  isVariantValid(variant: string): boolean;
+  isVariantValid(variant: number): boolean;
 }
 
 
-export const createWeapon = (weaponFields: WeaponFields): ?Weapon => {
-  const {id, score, dmg, variant} = weaponFields;
-  return isIdValid(id) && isScoreValid(score) && isDmgValid(dmg) && isVariantValid(variant) ?
+export const createWeapon = (weaponFields: any): ?Weapon => {
+  const {id, score, dmg, variant, activeTalent} = weaponFields;
+  return isIdValid(id) && isScoreValid(score) && isDmgValid(dmg) && isVariantValid(variant.id) ?
     Object.freeze({
       id: id,
       score: score,
       dmg: dmg,
       trash: false,
-      variant: variant
+      variant: variant,
+	  activeTalent: activeTalent
     }) :
     null;
 };
@@ -44,14 +44,6 @@ export const updateTrash = (weapon: Weapon, trash: boolean) =>
     Object.freeze({
       ...weapon,
       trash : trash
-    }) :
-    weapon;
-
-export const setId = (weapon: Weapon, id: number) =>
-  isIdValid(id) ?
-    Object.freeze({
-      ...weapon,
-      id : id
     }) :
     weapon;
 
@@ -69,22 +61,21 @@ export const isScoreValid = (score: number) =>
 
 export const isDmgValid = (dmg: number) =>
   R.allPass([
-    validators.isNumber,
-    validators.isGreaterThan(0)
+    validators.isNumber
+//    validators.isGreaterThan(0)
   ])(dmg);
   
-export const isVariantValid = (variant: string) =>
+export const isVariantValid = (variantId: number) =>
   R.allPass([
-    validators.isString,
-    validators.isLengthGreaterThan(0)
-  ])(variant);
+    validators.isNumber,
+    validators.isGreaterThan(0)
+  ])(variantId);
 	
 
 	
 export const WeaponServiceFactory = () => ({
   createWeapon,
   updateTrash,
-  setId,
   isIdValid,
   isScoreValid,
   isDmgValid,

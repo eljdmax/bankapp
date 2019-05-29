@@ -5,6 +5,18 @@ import {weaponStore, weaponEditStore} from "../store/WeaponStore";
 import {weaponService} from "../domain/WeaponService";
 import {restURL} from "./RestServiceConfig";
 
+
+export const weaponRestToObj = (data) => {
+	
+	return {id: Number(data.id),
+			score: Number(data.score),
+			dmg: Number(data.dmg),
+			variant: data.variant,
+			activeTalent: data.activeTalent
+			}
+	
+}
+
 export const fetchAllWeapons = () => {
   
   fetch(restURL+'/weapons/', {
@@ -18,18 +30,49 @@ export const fetchAllWeapons = () => {
   }).then( response => {
       response.json().then(data => {
 	  data.map((weaponRaw, index) => {
-          const newWeapon = weaponService.createWeapon({
-			id: Number(weaponRaw.id),
-			score: Number(weaponRaw.score),
-			dmg: Number(weaponRaw.dmg),
-			variant: weaponRaw.variant.name
-		  });
+          const newWeapon = weaponService.createWeapon(
+		      weaponRestToObj(weaponRaw)
+		  );
 		  if (newWeapon) {
 			weaponStore.addWeapon(newWeapon);
 		  }else{
+			  console.log("failed!")
 			  return false;
 		  }
 	  })
+    })
+  });
+  
+  return true;
+  
+}
+
+export const fetchWeapon = (id: number, update: boolean) => {
+  
+  fetch(restURL+'/weapon/'+id+'/', {
+    method: "GET",
+    //body: JSON.stringify(userData),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      "Access-Control-Allow-Origin" : "*"
+    }
+  }).then( response => {
+      response.json().then(data => {
+          const newWeapon = weaponService.createWeapon(
+		      weaponRestToObj(data)
+			);
+		  if (newWeapon) {
+			  console.log("Update? ", update);
+			  if (update) { 
+				weaponStore.updateWeapon(newWeapon);
+			} else {
+				weaponStore.addWeapon(newWeapon);
+			}
+
+		  }else{
+			  return false;
+		  }
     })
   });
   
@@ -58,23 +101,10 @@ export const postUpdateWeapon = (id:number, weaponFormData: WeaponFormData) => {
       "Access-Control-Allow-Origin" : "*"
     }
   }).then( response => {
-	  console.log("response ",response)
+	  
       response.json().then(data => {
-		  console.log("data: ", data)
-          const newWeapon = weaponService.createWeapon({
-			id: Number(data.id),
-			score: Number(weaponFormData.score),
-			dmg: Number(weaponFormData.dmg),
-			variant: "FAMAS"//weaponFormData.variant
-		  });
-		  if (newWeapon) {
-			if (id>0) { 
-				weaponStore.updateWeapon(newWeapon);
-                weaponEditStore.clear();
-			} else {
-				weaponStore.addWeapon(newWeapon);
-			}
-		  }
+			
+			fetchWeapon(data.id, id > 0)
 	  })
   });
   

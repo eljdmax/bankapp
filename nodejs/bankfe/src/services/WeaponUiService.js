@@ -1,6 +1,6 @@
 // @flow
 
-import type {Weapon} from "../domain/Weapon"
+import type {Weapon, ActiveWeaponTalent} from "../domain/Weapon"
 import * as R from 'ramda';
 
 
@@ -9,6 +9,11 @@ export const displayVariant = (variant: string) => variant.toUpperCase();
 export const displayTrash = (trash: boolean) => {
   return trash ? 'Is trash' : 'Not trash';
 };
+
+export const displayActiveTalent = (activeWeaponTalent: ActiveWeaponTalent) => {
+  return activeWeaponTalent ? activeWeaponTalent.name : 'No Talent';
+};
+
 
 export const compareWeaponBy = ( f: string[] = ['id'], asc: boolean = true) => {
 

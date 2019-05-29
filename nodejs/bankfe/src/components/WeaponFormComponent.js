@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 
+import type {NameId} from "../domain/NameId";
 import type {FormData} from "./WeaponFormContainer";
 
 
@@ -12,6 +13,7 @@ type Props = {
   changeWeaponScore:Function;
   changeWeaponDmg:Function;
   changeWeaponVariant:Function;
+  changeWeaponActiveTalent:Function;
 };
 
 export const WeaponFormComponent = (props: Props) => {
@@ -21,7 +23,8 @@ export const WeaponFormComponent = (props: Props) => {
     submitForm,
     changeWeaponScore,
     changeWeaponDmg,
-    changeWeaponVariant
+    changeWeaponVariant,
+	changeWeaponActiveTalent
   } = props;
 
   const onSubmit = (submitHandler) => (event) => {
@@ -61,15 +64,41 @@ export const WeaponFormComponent = (props: Props) => {
       </div>
       <div>
         <label htmlFor="weapon-variant">Variant</label>
-        <input
+        <select
           type="text"
           id="weapon-variant"
           name="weaponVariant"
           autoComplete="off"
           value={formData.weaponVariant.value}
           onChange={changeWeaponVariant}
-        />
+        >
+		    <option value=""> -- select a variant -- </option> 
+			{
+		      formData.weaponVariantList.map((nameId: NameId, index) => 
+			    <option key={index} value= {nameId.id}> {nameId.name} </option>
+              )
+			}
+		</select>
         {!formData.weaponVariant.valid && (<p>Please fill in the weapon variant</p>)}
+      </div>
+	  <div>
+        <label htmlFor="weapon-activetalent">Active Talent</label>
+        <select
+          type="text"
+          id="weapon-activetalent"
+          name="weaponActiveTalent"
+          autoComplete="off"
+          value={formData.weaponActiveTalent.value}
+          onChange={changeWeaponActiveTalent}
+        >
+		    <option value=""> -- select a talent -- </option> 
+			{
+		      formData.weaponActiveTalentList.map((nameId: NameId, index) => 
+			    <option key={index} value= {nameId.id}> {nameId.name} </option>
+              )
+			}
+		</select>
+        
       </div>
       <button
         type="submit"

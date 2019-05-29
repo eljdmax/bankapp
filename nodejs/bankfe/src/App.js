@@ -6,9 +6,14 @@ import './App.css';
 
 import {WeaponFormContainer} from "./components/WeaponFormContainer";
 import {WeaponListContainer} from "./components/WeaponListContainer";
+
 import * as weaponRestService from "./services/WeaponRestService";
+import * as listRestService from "./services/ListRestService";
 
 weaponRestService.fetchAllWeapons();
+listRestService.fetchWeaponVariants();
+listRestService.fetchWeaponActiveTalents();
+
 
 type Props = {};
 

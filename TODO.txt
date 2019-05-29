@@ -2,4 +2,35 @@
 
 > modular urls/views design
 
+[create-react-app@2.1.5]
+   [https://facebook.github.io/create-react-app/docs/adding-flow]
+   npm list -g --depth 0
+   https://www.codementor.io/blizzerand/building-forms-using-react-everything-you-need-to-know-iz3eyoq4y
+
+   
+   npm i ramda
+   
+
+{
+  "score": 500,
+  "dmg": "34",
+  "variant": 1,
+  "activeTalent": 1,
+  "passiveTalentIds": [1,2]
+}
+
+
+{
+  "score": 500,
+  "armor": "34",
+  "type": 1,
+  "family": 2,
+  "activeTalent": 1,
+  "passiveTalentIds": [
+    1
+  ],
+  "attributeIds": [1,2,3],
+  "modIds":[2,2]
+}
+
 https://imgur.com/a/eO6IrWx
