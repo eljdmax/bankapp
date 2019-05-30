@@ -2,42 +2,39 @@
 
 import React, { Component } from 'react';
 
-import type {NameId} from "../domain/NameId";
-import type {FormData} from "./WeaponFormContainer";
-
+import type { NameId } from '../domain/NameId';
+import type { FormData } from './WeaponFormContainer';
 
 type Props = {
-  formData: FormData;
-  submitForm: Function;
-  clearForm: Function;
-  changeWeaponScore:Function;
-  changeWeaponDmg:Function;
-  changeWeaponVariant:Function;
-  changeWeaponActiveTalent:Function;
+  formData: FormData,
+  submitForm: Function,
+  clearForm: Function,
+  changeWeaponScore: Function,
+  changeWeaponDmg: Function,
+  changeWeaponVariant: Function,
+  changeWeaponActiveTalent: Function,
+  changeWeaponPassiveTalents: Function,
 };
 
 export const WeaponFormComponent = (props: Props) => {
   const {
     formData,
-	clearForm,
+    clearForm,
     submitForm,
     changeWeaponScore,
     changeWeaponDmg,
     changeWeaponVariant,
-	changeWeaponActiveTalent
+    changeWeaponActiveTalent,
+    changeWeaponPassiveTalents,
   } = props;
 
-  const onSubmit = (submitHandler) => (event) => {
+  const onSubmit = submitHandler => event => {
     event.preventDefault();
     submitHandler(event);
   };
-  
 
   return (
-    <form
-      noValidate
-      onSubmit={onSubmit(submitForm)}
-    >
+    <form noValidate onSubmit={onSubmit(submitForm)}>
       <div>
         <label htmlFor="weapon-score">Score</label>
         <input
@@ -48,7 +45,7 @@ export const WeaponFormComponent = (props: Props) => {
           value={formData.weaponScore.value}
           onChange={changeWeaponScore}
         />
-        {!formData.weaponScore.valid && (<p>Please fill in the weapon score</p>)}
+        {!formData.weaponScore.valid && <p>Please fill in the weapon score</p>}
       </div>
       <div>
         <label htmlFor="weapon-dmg">Damage</label>
@@ -60,7 +57,7 @@ export const WeaponFormComponent = (props: Props) => {
           value={formData.weaponDmg.value}
           onChange={changeWeaponDmg}
         />
-        {!formData.weaponDmg.valid && (<p>Please fill in the weapon damage</p>)}
+        {!formData.weaponDmg.valid && <p>Please fill in the weapon damage</p>}
       </div>
       <div>
         <label htmlFor="weapon-variant">Variant</label>
@@ -72,16 +69,18 @@ export const WeaponFormComponent = (props: Props) => {
           value={formData.weaponVariant.value}
           onChange={changeWeaponVariant}
         >
-		    <option value=""> -- select a variant -- </option> 
-			{
-		      formData.weaponVariantList.map((nameId: NameId, index) => 
-			    <option key={index} value= {nameId.id}> {nameId.name} </option>
-              )
-			}
-		</select>
-        {!formData.weaponVariant.valid && (<p>Please fill in the weapon variant</p>)}
+          <option value=""> -- select a variant -- </option>
+          {formData.weaponVariantList.map((nameId: NameId, index) => (
+            <option key={index} value={nameId.id}>
+              {nameId.name}
+            </option>
+          ))}
+        </select>
+        {!formData.weaponVariant.valid && (
+          <p>Please fill in the weapon variant</p>
+        )}
       </div>
-	  <div>
+      <div>
         <label htmlFor="weapon-activetalent">Active Talent</label>
         <select
           type="text"
@@ -91,28 +90,39 @@ export const WeaponFormComponent = (props: Props) => {
           value={formData.weaponActiveTalent.value}
           onChange={changeWeaponActiveTalent}
         >
-		    <option value=""> -- select a talent -- </option> 
-			{
-		      formData.weaponActiveTalentList.map((nameId: NameId, index) => 
-			    <option key={index} value= {nameId.id}> {nameId.name} </option>
-              )
-			}
-		</select>
-        
+          <option value=""> -- select a talent -- </option>
+          {formData.weaponActiveTalentList.map((nameId: NameId, index) => (
+            <option key={index} value={nameId.id}>
+              {nameId.name}
+            </option>
+          ))}
+        </select>
       </div>
-      <button
-        type="submit"
-        value="Submit"
-      >
-	  { (formData.weaponId === 0 ) ? 'Add weapon' : 'Update weapon' }
+      <div>
+        <label htmlFor="weapon-passivetalents">Passive Talents</label>
+        <select
+          multiple={true}
+          size="3"
+          type="text"
+          id="weapon-passivetalents"
+          name="weaponPassiveTalents"
+          autoComplete="off"
+          value={formData.weaponPassiveTalents.value}
+          onChange={changeWeaponPassiveTalents}
+        >
+          {formData.weaponPassiveTalentList.map((nameId: NameId, index) => (
+            <option key={index} value={nameId.id}>
+              {nameId.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button type="submit" value="Submit">
+        {formData.weaponId === 0 ? 'Add weapon' : 'Update weapon'}
       </button>
-	  <button
-        type="button"
-        onClick={() => clearForm()}
-      >
-	  Clear
+      <button type="button" onClick={() => clearForm()}>
+        Clear
       </button>
     </form>
-  )
+  );
 };
-  

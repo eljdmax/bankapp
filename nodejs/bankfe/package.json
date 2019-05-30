@@ -25,6 +25,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "flow-bin": "^0.98.1"
+    "flow-bin": "^0.98.1",
+    "prettier-eslint": "^8.8.2"
   }
 }

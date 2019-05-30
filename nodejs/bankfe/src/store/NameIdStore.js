@@ -1,21 +1,20 @@
 // @flow
-import type {NameId} from "../domain/NameId";
-import type {NameIdState} from "./NameIdState";
+import type { NameId } from '../domain/NameId';
+import type { NameIdState } from './NameIdState';
 
 export type NameIdStore = {
-  addNameId(nameId: NameId): void;
-  clear(): void;
-  subscribe(subscriber: Function): Function;
-  unsubscribe(subscriber: Function): void;
-}
+  addNameId(nameId: NameId): void,
+  clear(): void,
+  subscribe(subscriber: Function): Function,
+  unsubscribe(subscriber: Function): void,
+};
 
-export const addNameId = (nameIdState: NameIdState, nameId: NameId) => nameIdState.concat(nameId);
-
+export const addNameId = (nameIdState: NameIdState, nameId: NameId) =>
+  nameIdState.concat(nameId);
 
 export const clear = (nameIdState: NameIdState) => {
   return Object.freeze([]);
 };
-
 
 export const subscribe = (subscribers: Function[], subscriber: Function) =>
   subscribers.concat(subscriber);
@@ -23,10 +22,10 @@ export const subscribe = (subscribers: Function[], subscriber: Function) =>
 export const unsubscribe = (subscribers: Function[], subscriber: Function) =>
   subscribers.filter((s: Function) => s !== subscriber);
 
-export const notify = (weaponState: WeaponState, subscribers: Function[]) =>
-  subscribers.forEach((s: Function) => s(weaponState));
+export const notify = (nameIdState: NameIdState, subscribers: Function[]) =>
+  subscribers.forEach((s: Function) => s(nameIdState));
 
-export const NameIdStoreFactory = (() => {
+export const NameIdStoreFactory = () => {
   let nameIdState: NameIdState = Object.freeze([]);
   let subscribers: Function[] = Object.freeze([]);
 
@@ -45,10 +44,10 @@ export const NameIdStoreFactory = (() => {
     },
     unsubscribe: (subscriber: Function) => {
       subscribers = unsubscribe(subscribers, subscriber);
-    }
-  }
-});
-
+    },
+  };
+};
 
 export const weaponVariantStore = NameIdStoreFactory();
 export const weaponActiveTalentStore = NameIdStoreFactory();
+export const weaponPassiveTalentStore = NameIdStoreFactory();

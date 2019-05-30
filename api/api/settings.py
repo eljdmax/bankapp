@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1","localhost"]
 
-
+'''
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -46,6 +46,7 @@ LOGGING = {
         },
     },
 }
+'''
 
 # CORS Settings :
 # See https://github.com/ottoyiu/django-cors-headers/#configuration

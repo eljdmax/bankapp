@@ -1,5 +1,5 @@
 // @flow
 export type NameId = {
-  +id: number;
-  +name: string;
-}
+  +id: number,
+  +name: string,
+};

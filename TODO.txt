@@ -2,13 +2,29 @@
 
 > modular urls/views design
 
+python manage.py createsuperuser --username admin
+
+#DELETE FROM django_migrations WHERE app='bank';
+
+Proxy:
+npm config set strict-ssl false
+npm config set https-proxy http://web-proxy.bbn.hpecorp.net:8080
+npm config set proxy http://web-proxy.bbn.hpecorp.net:8080
+
+
+npm install -g create-react-app
+npm install --save-dev flow-bin
+npm i ramda
+
+[https://www.robinwieruch.de/react-js-windows-setup/]
 [create-react-app@2.1.5]
    [https://facebook.github.io/create-react-app/docs/adding-flow]
+   
    npm list -g --depth 0
    https://www.codementor.io/blizzerand/building-forms-using-react-everything-you-need-to-know-iz3eyoq4y
 
+cd tp - / npm install
    
-   npm i ramda
    
 
 {
