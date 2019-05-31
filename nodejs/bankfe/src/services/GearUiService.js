@@ -1,6 +1,6 @@
 // @flow
 
-import type { Weapon, ActiveWeaponTalent } from '../domain/Weapon';
+import type { Gear, ActiveGearTalent } from '../domain/Gear';
 import * as R from 'ramda';
 
 export const displayVariant = (variant: string) => variant.toUpperCase();
@@ -9,12 +9,12 @@ export const displayTrash = (trash: boolean) => {
   return trash ? 'Is trash' : 'Not trash';
 };
 
-export const displayActiveTalent = (activeWeaponTalent: ActiveWeaponTalent) => {
-  return activeWeaponTalent ? activeWeaponTalent.name : 'No Talent';
+export const displayActiveTalent = (activeGearTalent: ActiveGearTalent) => {
+  return activeGearTalent ? activeGearTalent.name : 'No Talent';
 };
 
-export const compareWeaponBy = (f: string[] = ['id'], asc: boolean = true) => {
-  return (a: Weapon, b: Weapon) => {
+export const compareGearBy = (f: string[] = ['id'], asc: boolean = true) => {
+  return (a: Gear, b: Gear) => {
     let order = asc ? 1 : -1;
 
     if (R.path(f, a) < R.path(f, b)) {

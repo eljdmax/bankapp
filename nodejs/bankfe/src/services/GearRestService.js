@@ -1,24 +1,26 @@
 // @flow
 
-import type { WeaponFormData, Weapon } from '../domain/Weapon';
-import { weaponStore } from '../store/WeaponStore';
-import { weaponService } from '../domain/WeaponService';
+import type { GearFormData, Gear } from '../domain/Gear';
+import { gearStore } from '../store/GearStore';
+import { gearService } from '../domain/GearService';
 import { restURL } from './RestServiceConfig';
 
-export const weaponRestToObj = (data: any) => {
+export const gearRestToObj = (data: any) => {
   return {
     id: Number(data.id),
     score: Number(data.score),
-    dmg: Number(data.dmg),
-    trash: data.trash,
-    variant: data.variant,
+    armor: Number(data.armor),
+    type: data.type,
+    family: data.family,
     activeTalent: data.activeTalent,
     passiveTalents: data.passiveTalents,
+    attributes: data.attributes,
+    mods: data.mods,
   };
 };
 
-export const fetchAllWeapons = () => {
-  fetch(restURL + '/weapons/', {
+export const fetchAllGears = () => {
+  fetch(restURL + '/gears/', {
     method: 'GET',
     //body: JSON.stringify(userData),
     headers: {
@@ -28,12 +30,10 @@ export const fetchAllWeapons = () => {
     },
   }).then(response => {
     response.json().then(data => {
-      data.map((weaponRaw, index) => {
-        const newWeapon = weaponService.createWeapon(
-          weaponRestToObj(weaponRaw),
-        );
-        if (newWeapon) {
-          weaponStore.addWeapon(newWeapon);
+      data.map((gearRaw, index) => {
+        const newGear = gearService.createGear(gearRestToObj(gearRaw));
+        if (newGear) {
+          gearStore.addGear(newGear);
         } else {
           console.log('failed!');
           return false;
@@ -45,8 +45,8 @@ export const fetchAllWeapons = () => {
   return true;
 };
 
-export const fetchWeapon = (id: number, update: boolean) => {
-  fetch(restURL + '/weapon/' + id + '/', {
+export const fetchGear = (id: number, update: boolean) => {
+  fetch(restURL + '/gear/' + id + '/', {
     method: 'GET',
     //body: JSON.stringify(userData),
     headers: {
@@ -56,13 +56,13 @@ export const fetchWeapon = (id: number, update: boolean) => {
     },
   }).then(response => {
     response.json().then(data => {
-      const newWeapon = weaponService.createWeapon(weaponRestToObj(data));
-      if (newWeapon) {
+      const newGear = gearService.createGear(gearRestToObj(data));
+      if (newGear) {
         console.log('Update? ', update);
         if (update) {
-          weaponStore.updateWeapon(newWeapon);
+          gearStore.updateGear(newGear);
         } else {
-          weaponStore.addWeapon(newWeapon);
+          gearStore.addGear(newGear);
         }
       } else {
         return false;
@@ -73,13 +73,10 @@ export const fetchWeapon = (id: number, update: boolean) => {
   return true;
 };
 
-export const postUpdateWeapon = (
-  id: number,
-  weaponFormData: WeaponFormData,
-) => {
+export const postUpdateGear = (id: number, gearFormData: GearFormData) => {
   let ret = { success: true, msg: '' };
 
-  let url = restURL + '/weapon/';
+  let url = restURL + '/gear/';
   let method = 'POST';
   if (id > 0) {
     url = url + id + '/';
@@ -88,7 +85,7 @@ export const postUpdateWeapon = (
 
   fetch(url, {
     method: method,
-    body: JSON.stringify(weaponFormData),
+    body: JSON.stringify(gearFormData),
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -96,17 +93,17 @@ export const postUpdateWeapon = (
     },
   }).then(response => {
     response.json().then(data => {
-      fetchWeapon(data.id, id > 0);
+      fetchGear(data.id, id > 0);
     });
   });
 
   return ret;
 };
 
-export const deleteWeapon = (weapon: Weapon) => {
-  fetch(restURL + '/weapon/' + weapon.id + '/', {
+export const deleteGear = (gear: Gear) => {
+  fetch(restURL + '/gear/' + gear.id + '/', {
     method: 'DELETE',
-    //body: JSON.stringify(weaponFormData),
+    //body: JSON.stringify(gearFormData),
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -115,7 +112,7 @@ export const deleteWeapon = (weapon: Weapon) => {
   }).then(response => {
     console.log('response ', response);
     if (response.status === 204) {
-      weaponStore.removeWeapon(weapon);
+      gearStore.removeGear(gear);
     }
   });
 };

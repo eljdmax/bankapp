@@ -48,6 +48,19 @@ export const NameIdStoreFactory = () => {
   };
 };
 
+//Weapon
 export const weaponVariantStore = NameIdStoreFactory();
 export const weaponActiveTalentStore = NameIdStoreFactory();
 export const weaponPassiveTalentStore = NameIdStoreFactory();
+
+//Gear
+export const gearTypeStore = NameIdStoreFactory();
+export const gearFamilyStore = NameIdStoreFactory();
+export const gearActiveTalentStore = NameIdStoreFactory();
+export const gearPassiveTalentStore = NameIdStoreFactory();
+
+//Attribute
+export const gearAttributeStore = NameIdStoreFactory();
+
+//Attribute Type
+export const gearAttributeTypeStore = NameIdStoreFactory();
