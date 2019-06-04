@@ -2,7 +2,13 @@
 
 > modular urls/views design
 
+
+https://hackernoon.com/architecting-single-page-applications-b842ea633c2e
+
+python manage.py makemigrations
+python manage.py migrate
 python manage.py createsuperuser --username admin
+python manage.py runserver
 
 #DELETE FROM django_migrations WHERE app='bank';
 
@@ -15,6 +21,8 @@ npm config set proxy http://web-proxy.bbn.hpecorp.net:8080
 npm install -g create-react-app
 npm install --save-dev flow-bin
 npm i ramda
+npm install uuid
+npm install react-router-dom
 
 [https://www.robinwieruch.de/react-js-windows-setup/]
 [create-react-app@2.1.5]
@@ -45,7 +53,7 @@ cd tp - / npm install
   "passiveTalentIds": [
     1
   ],
-  "attributeIds": [1,2,3],
+  "attributeIds": [{id:1, value},{id:2, value}],
   "modIds":[2,2]
 }
 

@@ -25,8 +25,8 @@ export const createGear = (gearFields: any): ?Gear => {
     family,
     activeTalent,
     passiveTalents,
-    attributes,
-    mods,
+    gearAttributes,
+    gearMods,
   } = gearFields;
   return isIdValid(id) &&
     isScoreValid(score) &&
@@ -42,8 +42,8 @@ export const createGear = (gearFields: any): ?Gear => {
         family: family,
         activeTalent: activeTalent,
         passiveTalents: passiveTalents,
-        attributes: attributes,
-        mods: mods,
+        gearAttributes: gearAttributes,
+        gearMods: gearMods,
       })
     : null;
 };

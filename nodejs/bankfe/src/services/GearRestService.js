@@ -14,8 +14,8 @@ export const gearRestToObj = (data: any) => {
     family: data.family,
     activeTalent: data.activeTalent,
     passiveTalents: data.passiveTalents,
-    attributes: data.attributes,
-    mods: data.mods,
+    gearAttributes: data.gearAttributes,
+    gearMods: data.gearMods,
   };
 };
 

@@ -5,25 +5,34 @@ import * as R from 'ramda';
 
 import type { Gear } from '../domain/Gear';
 import type { NameId } from '../domain/NameId';
+import type { InternalGearMod } from '../domain/InternalGearMod';
+import type { InternalGearAttribute } from '../domain/InternalGearAttribute';
 import type {
   FormNumberField,
   FormNumberArrayField,
 } from '../domain/FormField';
+
 import type { GearService } from '../domain/GearService';
 import type { GearStore } from '../store/GearStore';
+
 import { gearService } from '../domain/GearService';
 import { gearStore, gearEditStore } from '../store/GearStore';
 import {
   gearTypeStore,
-  gearFamilyStore
+  gearFamilyStore,
   gearActiveTalentStore,
   gearPassiveTalentStore,
   gearAttributeStore,
-  gearAttributeTypeStore
+  gearAttributeTypeStore,
 } from '../store/NameIdStore';
+import { internalGearModStore } from '../store/InternalGearModStore';
+import { internalGearAttributeStore } from '../store/InternalGearAttributeStore';
 
 import { GearFormComponent } from './GearFormComponent';
 import * as gearRestService from '../services/GearRestService';
+
+import { internalGearModService } from '../domain/InternalGearModService';
+import { internalGearAttributeService } from '../domain/InternalGearAttributeService';
 
 type Props = {};
 
@@ -35,15 +44,15 @@ export type FormData = {
   gearPassiveTalentList: NameId[],
   gearAttributeList: NameId[],
   gearAttributeTypeList: NameId[],
-  
+  internalGearModList: InternalGearMod[],
+  internalGearAttributeList: InternalGearAttribute[],
+
   gearScore: FormNumberField,
   gearArmor: FormNumberField,
   gearType: FormNumberField,
   gearFamily: FormNumberField,
   gearActiveTalent: FormNumberField,
   gearPassiveTalents: FormNumberArrayField,
-  gearAttributes: FormNumberArrayField,
-  gearMods: FormNumberArrayField,
 };
 
 export class GearFormContainer extends Component<Props, FormData> {
@@ -57,6 +66,9 @@ export class GearFormContainer extends Component<Props, FormData> {
   attributeTypeSubscriber: Function;
   attributeSubscriber: Function;
 
+  internalGearModSuscriber: Function;
+  internalGearAttributeSuscriber: Function;
+
   constructor(props: Props) {
     super(props);
 
@@ -68,6 +80,8 @@ export class GearFormContainer extends Component<Props, FormData> {
       gearPassiveTalentList: [],
       gearAttributeList: [],
       gearAttributeTypeList: [],
+      internalGearModList: [],
+      internalGearAttributeList: [],
 
       gearScore: {
         value: 0,
@@ -93,19 +107,10 @@ export class GearFormContainer extends Component<Props, FormData> {
         value: [],
         valid: true,
       },
-      gearAttributes: {
-        value: [],
-        valid: true,
-      },
-      gearMods: {
-        value: [],
-        valid: true,
-      },
     };
 
     this.subscriber = gearEditStore.subscribe((gears: Gear[]) => {
       if (gears.length > 0) {
-
         let activeTalent = gears[0].activeTalent
           ? gears[0].activeTalent.id
           : '';
@@ -117,13 +122,30 @@ export class GearFormContainer extends Component<Props, FormData> {
           });
         }
 
+        if (gears[0].gearMods.length > 0) {
+          gears[0].gearMods.map(mod => {
+            internalGearModStore.addInternalGearMod(
+              internalGearModService.createInternalGearMod(mod),
+            );
+          });
+        }
+
+        if (gears[0].gearAttributes.length > 0) {
+          gears[0].gearAttributes.map(attribute => {
+            internalGearAttributeStore.addInternalGearAttribute(
+              internalGearAttributeService.createInternalGearAttribute(
+                attribute,
+              ),
+            );
+          });
+        }
 
         this.setState(state => {
           return R.pipe(
             R.assocPath(['gearId'], gears[0].id),
             R.assocPath(['gearScore', 'value'], gears[0].score),
             R.assocPath(['gearScore', 'valid'], true),
-            R.assocPath(['gearArmor', 'value'], gears[0].dmg),
+            R.assocPath(['gearArmor', 'value'], gears[0].armor),
             R.assocPath(['gearArmor', 'valid'], true),
             R.assocPath(['gearType', 'value'], gears[0].type.id),
             R.assocPath(['gearType', 'valid'], true),
@@ -138,17 +160,13 @@ export class GearFormContainer extends Component<Props, FormData> {
       }
     });
 
-    this.typeSubscriber = gearTypeStore.subscribe(
-      (nameIds: NameId[]) => {
-        this.setState(R.assocPath(['gearTypeList'], nameIds));
-      },
-    );
+    this.typeSubscriber = gearTypeStore.subscribe((nameIds: NameId[]) => {
+      this.setState(R.assocPath(['gearTypeList'], nameIds));
+    });
 
-    this.familySubscriber = gearFamilyStore.subscribe(
-      (nameIds: NameId[]) => {
-        this.setState(R.assocPath(['gearFamilyList'], nameIds));
-      },
-    ); 
+    this.familySubscriber = gearFamilyStore.subscribe((nameIds: NameId[]) => {
+      this.setState(R.assocPath(['gearFamilyList'], nameIds));
+    });
 
     this.activeTalentSubscriber = gearActiveTalentStore.subscribe(
       (nameIds: NameId[]) => {
@@ -166,14 +184,27 @@ export class GearFormContainer extends Component<Props, FormData> {
       (nameIds: NameId[]) => {
         this.setState(R.assocPath(['gearAttributeTypeList'], nameIds));
       },
-    ); 
+    );
 
     this.attributeSubscriber = gearAttributeStore.subscribe(
       (nameIds: NameId[]) => {
         this.setState(R.assocPath(['gearAttributeList'], nameIds));
       },
-    ); 
+    );
 
+    this.internalGearModSuscriber = internalGearModStore.subscribe(
+      (internalGearMods: InternalGearMod[]) => {
+        this.setState(R.assocPath(['internalGearModList'], internalGearMods));
+      },
+    );
+
+    this.internalGearAttributeSuscriber = internalGearAttributeStore.subscribe(
+      (internalGearAttributes: InternalGearAttribute[]) => {
+        this.setState(
+          R.assocPath(['internalGearAttributeList'], internalGearAttributes),
+        );
+      },
+    );
 
     this.gearStore = gearStore;
     this.gearService = gearService;
@@ -193,19 +224,13 @@ export class GearFormContainer extends Component<Props, FormData> {
 
   changeGearType(event: Event) {
     this.setState(
-      R.assocPath(
-        ['gearType', 'value'],
-        R.path(['target', 'value'], event),
-      ),
+      R.assocPath(['gearType', 'value'], R.path(['target', 'value'], event)),
     );
   }
 
   changeGearFamily(event: Event) {
     this.setState(
-      R.assocPath(
-        ['gearFamily', 'value'],
-        R.path(['target', 'value'], event),
-      ),
+      R.assocPath(['gearFamily', 'value'], R.path(['target', 'value'], event)),
     );
   }
 
@@ -227,32 +252,51 @@ export class GearFormContainer extends Component<Props, FormData> {
     );
   }
 
-  changeGearAttributes(event: Event) {
-    this.setState(
-      R.assocPath(
-        ['gearAttributes', 'value'],
-        Array.from(event.target.selectedOptions, item => item.value),
-      ),
+  changeGearMods(event: Event) {
+    internalGearModStore.addInternalGearMod(
+      internalGearModService.createInternalGearMod({
+        id: Number(event.target.selectedOptions[0].value),
+        name: event.target.selectedOptions[0].text,
+        fitted: false,
+      }),
     );
   }
 
-  changeGearMods(event: Event) {
-    this.setState(
-      R.assocPath(
-        ['gearMods', 'value'],
-        Array.from(event.target.selectedOptions, item => item.value),
-      ),
+  removeMod(internalGearMod: InternalGearMod) {
+    internalGearModStore.removeInternalGearMod(internalGearMod);
+  }
+
+  changeGearAttributes(event: Event) {
+    internalGearAttributeStore.addInternalGearAttribute(
+      internalGearAttributeService.createInternalGearAttribute({
+        attribute: {
+          id: Number(event.target.selectedOptions[0].value),
+          name: event.target.selectedOptions[0].text,
+        },
+        value: '0',
+      }),
     );
+  }
+
+  removeAttribute(internalGearAttribute: InternalGearAttribute) {
+    internalGearAttributeStore.removeInternalGearAttribute(
+      internalGearAttribute,
+    );
+  }
+
+  updateAttribute(event: Event, internalGearAttribute: InternalGearAttribute) {
+    let newGA = internalGearAttributeService.updateValue(
+      internalGearAttribute,
+      event.target.value,
+    );
+    internalGearAttributeStore.updateInternalGearAttribute(newGA);
   }
 
   submitForm(event: Event) {
-    const gearScore = Number(
-      R.path(['target', 'gearScore', 'value'], event),
-    );
+    const gearScore = Number(R.path(['target', 'gearScore', 'value'], event));
     const gearArmor = Number(R.path(['target', 'gearArmor', 'value'], event));
-    const gearType = Number(
-      R.path(['target', 'gearType', 'value'], event),
-    );
+    const gearType = Number(R.path(['target', 'gearType', 'value'], event));
+    const gearFamily = Number(R.path(['target', 'gearFamily', 'value'], event));
     const gearActiveTalent = R.path(
       ['target', 'gearActiveTalent', 'value'],
       event,
@@ -261,23 +305,38 @@ export class GearFormContainer extends Component<Props, FormData> {
       event.target.gearPassiveTalents.selectedOptions,
       item => item.value,
     );
+    const gearMods = Array.from(
+      this.state.internalGearModList,
+      item => item.mod.id,
+    );
+    const gearAttributes = Array.from(
+      this.state.internalGearAttributeList,
+      (item, index) => {
+        let id = item.ga.attribute.id;
+
+        let value = Number(
+          R.path(['target', 'gearInternalGA' + index, 'value'], event),
+        );
+        return { id: id, value: value };
+      },
+    );
 
     const isScoreValid = this.gearService.isScoreValid(gearScore);
     const isArmorValid = this.gearService.isArmorValid(gearArmor);
     const isTypeValid = this.gearService.isTypeValid(gearType);
-    const isFamilyValid = this.gearService.isFamilyValid(gearFamily)
+    const isFamilyValid = this.gearService.isFamilyValid(gearFamily);
 
-    if (isScoreValid && isDmgValid && isVariantValid && isFamilyValid) {
-      let submitStatus = gearRestService.postUpdateGear(
-        this.state.gearId,
-        {
-          score: gearScore,
-          dmg: gearArmor,
-          variant: gearType,
-          activeTalent: gearActiveTalent,
-          passiveTalentIds: gearPassiveTalents,
-        },
-      );
+    if (isScoreValid && isArmorValid && isTypeValid && isFamilyValid) {
+      let submitStatus = gearRestService.postUpdateGear(this.state.gearId, {
+        score: gearScore,
+        armor: gearArmor,
+        type: gearType,
+        family: gearFamily,
+        activeTalent: gearActiveTalent,
+        passiveTalentIds: gearPassiveTalents,
+        modIds: gearMods,
+        attributeIds: gearAttributes,
+      });
 
       if (submitStatus.success) {
         this.clearForm();
@@ -285,7 +344,7 @@ export class GearFormContainer extends Component<Props, FormData> {
         alert('An error occured!');
       }
     } else {
-      this.markInvalid(isScoreValid, isDmgValid, isVariantValid, isFamilyValid);
+      this.markInvalid(isScoreValid, isArmorValid, isTypeValid, isFamilyValid);
     }
   }
 
@@ -293,6 +352,9 @@ export class GearFormContainer extends Component<Props, FormData> {
     if (this.state.gearId > 0) {
       gearEditStore.clear();
     }
+
+    internalGearModStore.clear();
+    internalGearAttributeStore.clear();
 
     this.setState(state => {
       return R.pipe(
@@ -309,10 +371,6 @@ export class GearFormContainer extends Component<Props, FormData> {
         R.assocPath(['gearActiveTalent', 'valid'], true),
         R.assocPath(['gearPassiveTalents', 'value'], []),
         R.assocPath(['gearPassiveTalents', 'valid'], true),
-        R.assocPath(['gearAttributes', 'value'], []),
-        R.assocPath(['gearAttributes', 'valid'], true),
-        R.assocPath(['gearMods', 'value'], []),
-        R.assocPath(['gearMods', 'valid'], true),
       )(state);
     });
   }
@@ -341,6 +399,8 @@ export class GearFormContainer extends Component<Props, FormData> {
     gearPassiveTalentStore.unsubscribe(this.passiveTalentSubscriber);
     gearAttributeTypeStore.unsubscribe(this.attributeTypeSubscriber);
     gearAttributeStore.unsubscribe(this.attributeSubscriber);
+    internalGearModStore.unsubscribe(this.internalGearModSuscriber);
+    internalGearAttributeStore.unsubscribe(this.internalGearAttributeSuscriber);
   }
 
   render() {
@@ -352,17 +412,21 @@ export class GearFormContainer extends Component<Props, FormData> {
         changeGearScore={event => this.changeGearScore(event)}
         changeGearArmor={event => this.changeGearArmor(event)}
         changeGearType={event => this.changeGearType(event)}
-        changeGearFamily={event => this.changeGearType(event)}
+        changeGearFamily={event => this.changeGearFamily(event)}
         changeGearActiveTalent={event => this.changeGearActiveTalent(event)}
-        changeGearPassiveTalents={event =>
-          this.changeGearPassiveTalents(event)
+        changeGearPassiveTalents={event => this.changeGearPassiveTalents(event)}
+        changeGearAttributes={event => this.changeGearAttributes(event)}
+        removeAttribute={(internalGearAttribute: InternalGearAttribute) =>
+          this.removeAttribute(internalGearAttribute)
         }
-        changeGearAttributes={event =>
-          this.changeGearAttributes(event)
+        changeGearMods={event => this.changeGearMods(event)}
+        removeMod={(internalGearMod: InternalGearMod) =>
+          this.removeMod(internalGearMod)
         }
-        changeGearMods={event =>
-          this.changeGearMods(event)
-        }
+        updateAttribute={(
+          event,
+          internalGearAttribute: InternalGearAttribute,
+        ) => this.updateAttribute(event, internalGearAttribute)}
       />
     );
   }

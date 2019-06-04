@@ -17,7 +17,7 @@ listRestService.fetchWeaponPassiveTalents();
 
 type Props = {};
 
-class App extends Component<Props> {
+class Weapon extends Component<Props> {
   render() {
     return (
       <div className="App">
@@ -25,7 +25,6 @@ class App extends Component<Props> {
           <img src={logo} className="App-logo" alt="logo" />
           {/* */}
         </header>
-
         <WeaponFormContainer />
         <WeaponListContainer />
       </div>
@@ -33,4 +32,4 @@ class App extends Component<Props> {
   }
 }
 
-export default App;
+export default Weapon;

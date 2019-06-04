@@ -1,14 +1,16 @@
 // @flow
 
 import type { AttributeType } from './AttributeType';
+import type { Attribute } from './Attribute';
 
-export type Mod = {
-  +attribute: AttributeType,
+export type GearMod = {
+  +id: number,
+  +name: string,
   +fitted: boolean,
 };
 
-export type Attribute = {
-  +attribute: AttributeType,
+export type GearAttribute = {
+  +attribute: Attribute,
   +value: number,
 };
 
@@ -41,8 +43,8 @@ export type Gear = {
   +family: GearFamily,
   +activeTalent: ActiveGearTalent,
   +passiveTalents: PassiveGearTalent[],
-  +attributes: Attribute[],
-  +mods: Mod[],
+  +gearAttributes: GearAttribute[],
+  +gearMods: GearMod[],
 };
 
 export type AttributeFormData = {
@@ -57,6 +59,6 @@ export type GearFormData = {
   +family: number,
   +activeTalent: number,
   +passiveTalents: number[],
-  +mods: number[],
-  +attributes: AttributeFormData[],
+  +gearMods: number[],
+  +gearAttributes: AttributeFormData[],
 };

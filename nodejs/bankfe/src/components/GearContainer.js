@@ -20,7 +20,6 @@ export class GearContainer extends Component<Props> {
 
   constructor(props: Props) {
     super(props);
-
     this.gearStore = gearStore;
     this.gearService = gearService;
   }

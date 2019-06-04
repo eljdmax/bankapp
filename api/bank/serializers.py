@@ -66,7 +66,7 @@ class GearAttributeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = GearAttribute
 		fields = ('value', 'attribute')
-		depth = 0
+		depth = 1
 		
 class GearGetSerializer(serializers.ModelSerializer):
 	gearAttributes = GearAttributeSerializer(source="gearattribute_set", many=True, read_only=True)
@@ -167,8 +167,8 @@ class GearCreateSerializer(serializers.ModelSerializer):
 		if gearAttributeData != None:
 			GearAttribute.objects.filter(gear=instance).delete()
 			for k in gearAttributeData:
-				attribute = Attribute.objects.get(pk=k)
-				GearAttribute.objects.create(gear=instance, attribute=attribute)
+				attribute = Attribute.objects.get(pk=k.get('id'))
+				GearAttribute.objects.create(gear=instance, attribute=attribute, value=k.get('value'))
 				
 		instance.save()
 		
