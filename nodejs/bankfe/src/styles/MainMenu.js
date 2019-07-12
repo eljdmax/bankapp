@@ -84,8 +84,17 @@ export const StatusSection = styled.div`
   right: 101px;
   top: 4px;
 
+  background: none;
+
   border: 2px solid #fd5e04;
   box-sizing: border-box;
+
+  ${props =>
+    props.isTrash &&
+    props.isTrash === true &&
+    css`
+      background: #555555;
+    `}
 `;
 
 export const StatusText = styled.div`

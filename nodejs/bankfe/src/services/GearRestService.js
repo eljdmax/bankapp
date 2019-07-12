@@ -16,6 +16,7 @@ export const gearRestToObj = (data: any) => {
     passiveTalents: data.passiveTalents,
     gearAttributes: data.gearAttributes,
     gearMods: data.gearMods,
+    trash: data.trash,
   };
 };
 

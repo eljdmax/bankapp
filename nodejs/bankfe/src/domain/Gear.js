@@ -56,6 +56,7 @@ export type GearFormData = {
   +score: number,
   +armor: number,
   +type: number,
+  +trash: boolean,
   +family: number,
   +activeTalent: number,
   +passiveTalents: number[],

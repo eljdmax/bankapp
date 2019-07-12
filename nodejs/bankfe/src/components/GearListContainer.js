@@ -32,7 +32,7 @@ export class GearListContainer extends Component<Props, State> {
   familyFilterSubscriber: Function;
   trashFilterSubscriber: Function;
   orderBySubscriber: Function;
-  thenOrderSubscriber: Function;
+  thenOrderBySubscriber: Function;
 
   gearStore: GearStore;
   gearType: NameId;

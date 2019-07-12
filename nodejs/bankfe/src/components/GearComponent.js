@@ -24,12 +24,12 @@ export const GearComponent = (props: Props) => {
         <st.ToolsSection>
           <st.PenBtn title="Edit" onClick={() => editGear(gear)} />
           <st.EjectBtn
-            title="Mark as trash"
+            title={gear.trash === true ? 'Unmark trash' : 'Mark as trash'}
             onClick={() => toggleTrash(gear)}
           />
           <st.TrashBtn title="Delete" onClick={() => deleteGear(gear)} />
         </st.ToolsSection>
-        <st.StatusSection>
+        <st.StatusSection isTrash={gear.trash === true}>
           <st.StatusText>
             {gear.type.name} {gear.family.name} {gear.score} {gear.armor}
           </st.StatusText>
