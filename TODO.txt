@@ -23,6 +23,7 @@ npm install --save-dev flow-bin
 npm i ramda
 npm install uuid
 npm install react-router-dom
+npm install --save styled-components
 
 [https://www.robinwieruch.de/react-js-windows-setup/]
 [create-react-app@2.1.5]

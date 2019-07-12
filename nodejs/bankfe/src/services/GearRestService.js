@@ -30,15 +30,14 @@ export const fetchAllGears = () => {
     },
   }).then(response => {
     response.json().then(data => {
-      data.map((gearRaw, index) => {
+      let newGears = data.map((gearRaw, index) => {
         const newGear = gearService.createGear(gearRestToObj(gearRaw));
-        if (newGear) {
-          gearStore.addGear(newGear);
-        } else {
-          console.log('failed!');
-          return false;
+        if (!newGear) {
+          console.log('failed to instantiate a new Gear!');
         }
+        return newGear;
       });
+      gearStore.addGears(newGears);
     });
   });
 

@@ -12,6 +12,7 @@ import * as weaponRestService from '../services/WeaponRestService';
 
 type Props = {
   weapon: Weapon,
+  viewFilter: any,
 };
 
 export class WeaponContainer extends Component<Props> {
@@ -20,7 +21,6 @@ export class WeaponContainer extends Component<Props> {
 
   constructor(props: Props) {
     super(props);
-
     this.weaponStore = weaponStore;
     this.weaponService = weaponService;
   }
@@ -40,14 +40,13 @@ export class WeaponContainer extends Component<Props> {
 
   render() {
     return (
-      <div>
-        <WeaponComponent
-          weapon={this.props.weapon}
-          toggleTrash={(weapon: Weapon) => this.toggleTrash(weapon)}
-          editWeapon={(weapon: Weapon) => this.editWeapon(weapon)}
-          deleteWeapon={(weapon: Weapon) => this.removeWeapon(weapon)}
-        />
-      </div>
+      <WeaponComponent
+        weapon={this.props.weapon}
+        viewFilter={this.props.viewFilter}
+        toggleTrash={(weapon: Weapon) => this.toggleTrash(weapon)}
+        editWeapon={(weapon: Weapon) => this.editWeapon(weapon)}
+        deleteWeapon={(weapon: Weapon) => this.removeWeapon(weapon)}
+      />
     );
   }
 }

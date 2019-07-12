@@ -12,6 +12,7 @@ import * as gearRestService from '../services/GearRestService';
 
 type Props = {
   gear: Gear,
+  viewFilter: any,
 };
 
 export class GearContainer extends Component<Props> {
@@ -39,14 +40,13 @@ export class GearContainer extends Component<Props> {
 
   render() {
     return (
-      <div>
-        <GearComponent
-          gear={this.props.gear}
-          toggleTrash={(gear: Gear) => this.toggleTrash(gear)}
-          editGear={(gear: Gear) => this.editGear(gear)}
-          deleteGear={(gear: Gear) => this.removeGear(gear)}
-        />
-      </div>
+      <GearComponent
+        gear={this.props.gear}
+        viewFilter={this.props.viewFilter}
+        toggleTrash={(gear: Gear) => this.toggleTrash(gear)}
+        editGear={(gear: Gear) => this.editGear(gear)}
+        deleteGear={(gear: Gear) => this.removeGear(gear)}
+      />
     );
   }
 }

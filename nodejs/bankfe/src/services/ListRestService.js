@@ -10,6 +10,9 @@ import {
   gearPassiveTalentStore,
   gearAttributeStore,
   gearAttributeTypeStore,
+  yesNoStore,
+  viewAttributesStore,
+  viewTalentsStore,
 } from '../store/NameIdStore';
 import { restURL } from './RestServiceConfig';
 
@@ -146,4 +149,15 @@ export const fetchGearAttributeTypes = () => {
       gearAttributeTypeStore.addNameId(data);
     });
   });
+};
+
+export const setYesNoStore = () => {
+  yesNoStore.clear();
+  yesNoStore.addNameId({ id: 0, name: 'Yes' });
+  yesNoStore.addNameId({ id: 1, name: 'No' });
+};
+
+export const setFilters = () => {
+  viewAttributesStore.addNameId({ id: 0, name: 'Yes' });
+  viewTalentsStore.addNameId({ id: 0, name: 'Yes' });
 };

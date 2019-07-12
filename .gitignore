@@ -1,6 +1,6 @@
 *.pyc
 **/__pycache__
-*-lock.json
+*package*.json
 node_modules/
 **/migrations/*.py
 **/.vscode

@@ -28,17 +28,17 @@ export const fetchAllWeapons = () => {
     },
   }).then(response => {
     response.json().then(data => {
-      data.map((weaponRaw, index) => {
+      let newWeapons = [];
+      newWeapons = data.map((weaponRaw, index) => {
         const newWeapon = weaponService.createWeapon(
           weaponRestToObj(weaponRaw),
         );
-        if (newWeapon) {
-          weaponStore.addWeapon(newWeapon);
-        } else {
-          console.log('failed!');
-          return false;
+        if (!newWeapon) {
+          console.log('failed to instantiate a weapon!');
         }
+        return newWeapon;
       });
+      weaponStore.addWeapons(newWeapons);
     });
   });
 

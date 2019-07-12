@@ -1,19 +1,23 @@
 // @flow
-import {update} from "ramda";
+import { update } from 'ramda';
 
-import type {Weapon} from "../domain/Weapon";
-import type {WeaponState} from "./WeaponState";
+import type { Weapon } from '../domain/Weapon';
+import type { WeaponState } from './WeaponState';
 
 export type WeaponStore = {
-  addWeapon(weapon: Weapon): void;
-  removeWeapon(weapon: Weapon): void;
-  updateWeapon(weapon: Weapon): void;
-  clear(): void;
-  subscribe(subscriber: Function): Function;
-  unsubscribe(subscriber: Function): void;
-}
+  getState(): WeaponState,
+  addWeapon(weapon: Weapon): void,
+  addWeapons(weapons: Weapon[]): void,
+  removeWeapon(weapon: Weapon): void,
+  updateWeapon(weapon: Weapon): void,
+  clear(): void,
+  toggleVisibility(): void,
+  subscribe(subscriber: Function): Function,
+  unsubscribe(subscriber: Function): void,
+};
 
-export const addWeapon = (weaponState: WeaponState, weapon: Weapon) => weaponState.concat(weapon);
+export const addWeapon = (weaponState: WeaponState, weapon: Weapon) =>
+  weaponState.concat(weapon);
 
 export const removeWeapon = (weaponState: WeaponState, weapon: Weapon) =>
   weaponState.filter((a: Weapon) => a.id !== weapon.id);
@@ -36,13 +40,22 @@ export const unsubscribe = (subscribers: Function[], subscriber: Function) =>
 export const notify = (weaponState: WeaponState, subscribers: Function[]) =>
   subscribers.forEach((s: Function) => s(weaponState));
 
-export const WeaponStoreFactory = (() => {
+export const WeaponStoreFactory = () => {
   let weaponState: WeaponState = Object.freeze([]);
   let subscribers: Function[] = Object.freeze([]);
 
   return {
+    getState: () => {
+      return weaponState;
+    },
     addWeapon: (weapon: Weapon) => {
       weaponState = addWeapon(weaponState, weapon);
+      notify(weaponState, subscribers);
+    },
+    addWeapons: (weapons: Weapon[]) => {
+      weapons.forEach((weapon, index) => {
+        weaponState = addWeapon(weaponState, weapon);
+      });
       notify(weaponState, subscribers);
     },
     removeWeapon: (weapon: Weapon) => {
@@ -57,15 +70,18 @@ export const WeaponStoreFactory = (() => {
       weaponState = updateWeapon(weaponState, weapon);
       notify(weaponState, subscribers);
     },
+    toggleVisibility: () => {
+      notify(weaponState, subscribers);
+    },
     subscribe: (subscriber: Function) => {
       subscribers = subscribe(subscribers, subscriber);
       return subscriber;
     },
     unsubscribe: (subscriber: Function) => {
       subscribers = unsubscribe(subscribers, subscriber);
-    }
-  }
-});
+    },
+  };
+};
 
 export const weaponStore = WeaponStoreFactory();
 

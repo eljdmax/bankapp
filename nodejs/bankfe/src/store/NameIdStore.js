@@ -3,7 +3,11 @@ import type { NameId } from '../domain/NameId';
 import type { NameIdState } from './NameIdState';
 
 export type NameIdStore = {
+  getState(): NameIdState,
   addNameId(nameId: NameId): void,
+  addNameIds(nameIds: NameId[]): void,
+  replaceNameId(nameId: NameId): void,
+  toggleVisibility(): void,
   clear(): void,
   subscribe(subscriber: Function): Function,
   unsubscribe(subscriber: Function): void,
@@ -30,8 +34,25 @@ export const NameIdStoreFactory = () => {
   let subscribers: Function[] = Object.freeze([]);
 
   return {
+    getState: () => {
+      return nameIdState;
+    },
     addNameId: (nameId: NameId) => {
       nameIdState = addNameId(nameIdState, nameId);
+      notify(nameIdState, subscribers);
+    },
+    addNameIds: (nameIds: NameId[]) => {
+      nameIds.forEach((nameId, index) => {
+        nameIdState = addNameId(nameIdState, nameId);
+      });
+      notify(nameIdState, subscribers);
+    },
+    replaceNameId: (nameId: NameId) => {
+      nameIdState = clear(nameIdState);
+      nameIdState = addNameId(nameIdState, nameId);
+      notify(nameIdState, subscribers);
+    },
+    toggleVisibility: () => {
       notify(nameIdState, subscribers);
     },
     clear: () => {
@@ -64,3 +85,24 @@ export const gearAttributeStore = NameIdStoreFactory();
 
 //Attribute Type
 export const gearAttributeTypeStore = NameIdStoreFactory();
+
+//Left Menu Filter
+export const leftMenuFilterStore = NameIdStoreFactory();
+
+//View Settings
+export const settingsViewStore = NameIdStoreFactory();
+
+//Yes, No list
+export const yesNoStore = NameIdStoreFactory();
+
+//Filters
+export const viewAttributesStore = NameIdStoreFactory();
+export const viewTalentsStore = NameIdStoreFactory();
+
+export const familyFilterStore = NameIdStoreFactory();
+export const trashFilterStore = NameIdStoreFactory();
+
+export const orderByStore = NameIdStoreFactory();
+export const thenOrderByStore = NameIdStoreFactory();
+
+export const variantTypeFilterStore = NameIdStoreFactory();

@@ -5,10 +5,13 @@ import type { Gear } from '../domain/Gear';
 import type { GearState } from './GearState';
 
 export type GearStore = {
+  getState(): GearState,
   addGear(gear: Gear): void,
+  addGears(gears: Gear[]): void,
   removeGear(gear: Gear): void,
   updateGear(gear: Gear): void,
   clear(): void,
+  toggleVisibility(): void,
   subscribe(subscriber: Function): Function,
   unsubscribe(subscriber: Function): void,
 };
@@ -42,8 +45,17 @@ export const GearStoreFactory = () => {
   let subscribers: Function[] = Object.freeze([]);
 
   return {
+    getState: () => {
+      return gearState;
+    },
     addGear: (gear: Gear) => {
       gearState = addGear(gearState, gear);
+      notify(gearState, subscribers);
+    },
+    addGears: (gears: Gear[]) => {
+      gears.forEach((gear, index) => {
+        gearState = addGear(gearState, gear);
+      });
       notify(gearState, subscribers);
     },
     removeGear: (gear: Gear) => {
@@ -56,6 +68,9 @@ export const GearStoreFactory = () => {
     },
     updateGear: (gear: Gear) => {
       gearState = updateGear(gearState, gear);
+      notify(gearState, subscribers);
+    },
+    toggleVisibility: () => {
       notify(gearState, subscribers);
     },
     subscribe: (subscriber: Function) => {

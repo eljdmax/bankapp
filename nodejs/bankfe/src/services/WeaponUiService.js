@@ -13,9 +13,12 @@ export const displayActiveTalent = (activeWeaponTalent: ActiveWeaponTalent) => {
   return activeWeaponTalent ? activeWeaponTalent.name : 'No Talent';
 };
 
-export const compareWeaponBy = (f: string[] = ['id'], asc: boolean = true) => {
+export const compareWeaponBy = (
+  f: string[] = ['dmg'],
+  asc: boolean = false,
+) => {
   return (a: Weapon, b: Weapon) => {
-    let order = asc ? 1 : -1;
+    let order = asc ? -1 : 1;
 
     if (R.path(f, a) < R.path(f, b)) {
       return order;
@@ -24,5 +27,14 @@ export const compareWeaponBy = (f: string[] = ['id'], asc: boolean = true) => {
       return -1 * order;
     }
     return 0;
+  };
+};
+
+export const filterWeaponBy = (
+  value: number,
+  f: string[] = ['variant', 'family'],
+) => {
+  return (item: any) => {
+    return R.path(f, item) === value;
   };
 };

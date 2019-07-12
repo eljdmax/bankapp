@@ -17,10 +17,14 @@ import {
   weaponVariantStore,
   weaponActiveTalentStore,
   weaponPassiveTalentStore,
+  leftMenuFilterStore,
 } from '../store/NameIdStore';
 
 import { WeaponFormComponent } from './WeaponFormComponent';
 import * as weaponRestService from '../services/WeaponRestService';
+
+import { GenericFormWrap } from '../styles/GenericForm';
+import { Modal } from '../styles/Body';
 
 type Props = {};
 
@@ -40,6 +44,7 @@ export class WeaponFormContainer extends Component<Props, FormData> {
   weaponStore: WeaponStore;
   weaponService: WeaponService;
   subscriber: Function;
+  familyFilterSubscriber: Function;
   variantSubscriber: Function;
   activeTalentSubscriber: Function;
   passiveTalentSubscriber: Function;
@@ -48,10 +53,13 @@ export class WeaponFormContainer extends Component<Props, FormData> {
     super(props);
 
     this.state = {
+      visible: false,
       weaponId: 0,
-      weaponVariantList: [],
-      weaponActiveTalentList: [],
-      weaponPassiveTalentList: [],
+      weaponVariantList: weaponVariantStore.getState(),
+      weaponActiveTalentList: weaponActiveTalentStore.getState(),
+      weaponPassiveTalentList: weaponPassiveTalentStore.getState(),
+
+      weaponFamilyFilter: { id: 1 },
       weaponScore: {
         value: 0,
         valid: true,
@@ -75,6 +83,8 @@ export class WeaponFormContainer extends Component<Props, FormData> {
     };
 
     this.subscriber = weaponEditStore.subscribe((weapons: Weapon[]) => {
+      if (!this.state.visible) this.setState(R.assocPath(['visible'], true));
+
       if (weapons.length > 0) {
         let activeTalent = weapons[0].activeTalent
           ? weapons[0].activeTalent.id
@@ -82,8 +92,8 @@ export class WeaponFormContainer extends Component<Props, FormData> {
 
         let passiveTalents = [];
         if (weapons[0].passiveTalents.length > 0) {
-          weapons[0].passiveTalents.map(talent => {
-            passiveTalents.push(talent.id);
+          passiveTalents = weapons[0].passiveTalents.map(talent => {
+            return talent.id;
           });
         }
 
@@ -104,6 +114,14 @@ export class WeaponFormContainer extends Component<Props, FormData> {
         });
       }
     });
+
+    this.familyFilterSubscriber = leftMenuFilterStore.subscribe(
+      (nameIds: NameId[]) => {
+        if (nameIds.length > 0) {
+          this.setState(R.assocPath(['weaponFamilyFilter'], nameIds[0]));
+        }
+      },
+    );
 
     this.variantSubscriber = weaponVariantStore.subscribe(
       (nameIds: NameId[]) => {
@@ -200,7 +218,7 @@ export class WeaponFormContainer extends Component<Props, FormData> {
       );
 
       if (submitStatus.success) {
-        this.clearForm();
+        this.closeForm();
       } else {
         alert('An error occured!');
       }
@@ -231,6 +249,11 @@ export class WeaponFormContainer extends Component<Props, FormData> {
     });
   }
 
+  closeForm() {
+    this.clearForm();
+    this.setState(R.assocPath(['visible'], false));
+  }
+
   markInvalid(
     isScoreValid: boolean,
     isDmgValid: boolean,
@@ -250,22 +273,33 @@ export class WeaponFormContainer extends Component<Props, FormData> {
     weaponVariantStore.unsubscribe(this.variantSubscriber);
     weaponActiveTalentStore.unsubscribe(this.activeTalentSubscriber);
     weaponPassiveTalentStore.unsubscribe(this.passiveTalentSubscriber);
+    leftMenuFilterStore.unsubscribe(this.familyFilterSubscriber);
   }
 
   render() {
+    if (!this.state.visible) {
+      return null;
+    }
     return (
-      <WeaponFormComponent
-        formData={this.state}
-        submitForm={this.submitForm.bind(this)}
-        clearForm={() => this.clearForm()}
-        changeWeaponScore={event => this.changeWeaponScore(event)}
-        changeWeaponDmg={event => this.changeWeaponDmg(event)}
-        changeWeaponVariant={event => this.changeWeaponVariant(event)}
-        changeWeaponActiveTalent={event => this.changeWeaponActiveTalent(event)}
-        changeWeaponPassiveTalents={event =>
-          this.changeWeaponPassiveTalents(event)
-        }
-      />
+      <Modal>
+        <GenericFormWrap>
+          <WeaponFormComponent
+            formData={this.state}
+            submitForm={this.submitForm.bind(this)}
+            clearForm={() => this.clearForm()}
+            closeForm={() => this.closeForm()}
+            changeWeaponScore={event => this.changeWeaponScore(event)}
+            changeWeaponDmg={event => this.changeWeaponDmg(event)}
+            changeWeaponVariant={event => this.changeWeaponVariant(event)}
+            changeWeaponActiveTalent={event =>
+              this.changeWeaponActiveTalent(event)
+            }
+            changeWeaponPassiveTalents={event =>
+              this.changeWeaponPassiveTalents(event)
+            }
+          />
+        </GenericFormWrap>
+      </Modal>
     );
   }
 }

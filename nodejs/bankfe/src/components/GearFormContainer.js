@@ -24,6 +24,7 @@ import {
   gearPassiveTalentStore,
   gearAttributeStore,
   gearAttributeTypeStore,
+  leftMenuFilterStore,
 } from '../store/NameIdStore';
 import { internalGearModStore } from '../store/InternalGearModStore';
 import { internalGearAttributeStore } from '../store/InternalGearAttributeStore';
@@ -33,6 +34,9 @@ import * as gearRestService from '../services/GearRestService';
 
 import { internalGearModService } from '../domain/InternalGearModService';
 import { internalGearAttributeService } from '../domain/InternalGearAttributeService';
+
+import { GenericFormWrap } from '../styles/GenericForm';
+import { Modal } from '../styles/Body';
 
 type Props = {};
 
@@ -59,6 +63,7 @@ export class GearFormContainer extends Component<Props, FormData> {
   gearStore: GearStore;
   gearService: GearService;
   subscriber: Function;
+  typeFilterSubscriber: Function;
   typeSubscriber: Function;
   familySubscriber: Function;
   activeTalentSubscriber: Function;
@@ -73,16 +78,18 @@ export class GearFormContainer extends Component<Props, FormData> {
     super(props);
 
     this.state = {
+      visible: false,
       gearId: 0,
-      gearTypeList: [],
-      gearFamilyList: [],
-      gearActiveTalentList: [],
-      gearPassiveTalentList: [],
-      gearAttributeList: [],
-      gearAttributeTypeList: [],
+      gearTypeList: gearTypeStore.getState(),
+      gearFamilyList: gearFamilyStore.getState(),
+      gearActiveTalentList: gearActiveTalentStore.getState(),
+      gearPassiveTalentList: gearPassiveTalentStore.getState(),
+      gearAttributeList: gearAttributeStore.getState(),
+      gearAttributeTypeList: gearAttributeTypeStore.getState(),
       internalGearModList: [],
       internalGearAttributeList: [],
 
+      gearTypeFilter: { id: 1 },
       gearScore: {
         value: 0,
         valid: true,
@@ -92,7 +99,7 @@ export class GearFormContainer extends Component<Props, FormData> {
         valid: true,
       },
       gearType: {
-        value: '',
+        value: 1,
         valid: true,
       },
       gearFamily: {
@@ -110,6 +117,8 @@ export class GearFormContainer extends Component<Props, FormData> {
     };
 
     this.subscriber = gearEditStore.subscribe((gears: Gear[]) => {
+      if (!this.state.visible) this.setState(R.assocPath(['visible'], true));
+
       if (gears.length > 0) {
         let activeTalent = gears[0].activeTalent
           ? gears[0].activeTalent.id
@@ -117,13 +126,13 @@ export class GearFormContainer extends Component<Props, FormData> {
 
         let passiveTalents = [];
         if (gears[0].passiveTalents.length > 0) {
-          gears[0].passiveTalents.map(talent => {
-            passiveTalents.push(talent.id);
+          passiveTalents = gears[0].passiveTalents.map(talent => {
+            return talent.id;
           });
         }
 
         if (gears[0].gearMods.length > 0) {
-          gears[0].gearMods.map(mod => {
+          gears[0].gearMods.forEach(mod => {
             internalGearModStore.addInternalGearMod(
               internalGearModService.createInternalGearMod(mod),
             );
@@ -131,7 +140,7 @@ export class GearFormContainer extends Component<Props, FormData> {
         }
 
         if (gears[0].gearAttributes.length > 0) {
-          gears[0].gearAttributes.map(attribute => {
+          gears[0].gearAttributes.forEach(attribute => {
             internalGearAttributeStore.addInternalGearAttribute(
               internalGearAttributeService.createInternalGearAttribute(
                 attribute,
@@ -159,6 +168,15 @@ export class GearFormContainer extends Component<Props, FormData> {
         });
       }
     });
+
+    this.typeFilterSubscriber = leftMenuFilterStore.subscribe(
+      (nameIds: NameId[]) => {
+        if (nameIds.length > 0) {
+          this.setState(R.assocPath(['gearTypeFilter'], nameIds[0]));
+          this.setState(R.assocPath(['gearType', 'value'], nameIds[0].id));
+        }
+      },
+    );
 
     this.typeSubscriber = gearTypeStore.subscribe((nameIds: NameId[]) => {
       this.setState(R.assocPath(['gearTypeList'], nameIds));
@@ -339,7 +357,7 @@ export class GearFormContainer extends Component<Props, FormData> {
       });
 
       if (submitStatus.success) {
-        this.clearForm();
+        this.closeForm();
       } else {
         alert('An error occured!');
       }
@@ -363,7 +381,7 @@ export class GearFormContainer extends Component<Props, FormData> {
         R.assocPath(['gearScore', 'valid'], true),
         R.assocPath(['gearArmor', 'value'], 0),
         R.assocPath(['gearArmor', 'valid'], true),
-        R.assocPath(['gearType', 'value'], ''),
+        R.assocPath(['gearType', 'value'], this.state.gearTypeFilter.id),
         R.assocPath(['gearType', 'valid'], true),
         R.assocPath(['gearFamily', 'value'], ''),
         R.assocPath(['gearFamily', 'valid'], true),
@@ -373,6 +391,11 @@ export class GearFormContainer extends Component<Props, FormData> {
         R.assocPath(['gearPassiveTalents', 'valid'], true),
       )(state);
     });
+  }
+
+  closeForm() {
+    this.clearForm();
+    this.setState(R.assocPath(['visible'], false));
   }
 
   markInvalid(
@@ -401,33 +424,45 @@ export class GearFormContainer extends Component<Props, FormData> {
     gearAttributeStore.unsubscribe(this.attributeSubscriber);
     internalGearModStore.unsubscribe(this.internalGearModSuscriber);
     internalGearAttributeStore.unsubscribe(this.internalGearAttributeSuscriber);
+    leftMenuFilterStore.unsubscribe(this.typeFilterSubscriber);
   }
 
   render() {
+    if (!this.state.visible) {
+      return null;
+    }
+
     return (
-      <GearFormComponent
-        formData={this.state}
-        submitForm={this.submitForm.bind(this)}
-        clearForm={() => this.clearForm()}
-        changeGearScore={event => this.changeGearScore(event)}
-        changeGearArmor={event => this.changeGearArmor(event)}
-        changeGearType={event => this.changeGearType(event)}
-        changeGearFamily={event => this.changeGearFamily(event)}
-        changeGearActiveTalent={event => this.changeGearActiveTalent(event)}
-        changeGearPassiveTalents={event => this.changeGearPassiveTalents(event)}
-        changeGearAttributes={event => this.changeGearAttributes(event)}
-        removeAttribute={(internalGearAttribute: InternalGearAttribute) =>
-          this.removeAttribute(internalGearAttribute)
-        }
-        changeGearMods={event => this.changeGearMods(event)}
-        removeMod={(internalGearMod: InternalGearMod) =>
-          this.removeMod(internalGearMod)
-        }
-        updateAttribute={(
-          event,
-          internalGearAttribute: InternalGearAttribute,
-        ) => this.updateAttribute(event, internalGearAttribute)}
-      />
+      <Modal>
+        <GenericFormWrap>
+          <GearFormComponent
+            formData={this.state}
+            submitForm={this.submitForm.bind(this)}
+            clearForm={() => this.clearForm()}
+            closeForm={() => this.closeForm()}
+            changeGearScore={event => this.changeGearScore(event)}
+            changeGearArmor={event => this.changeGearArmor(event)}
+            changeGearType={event => this.changeGearType(event)}
+            changeGearFamily={event => this.changeGearFamily(event)}
+            changeGearActiveTalent={event => this.changeGearActiveTalent(event)}
+            changeGearPassiveTalents={event =>
+              this.changeGearPassiveTalents(event)
+            }
+            changeGearAttributes={event => this.changeGearAttributes(event)}
+            removeAttribute={(internalGearAttribute: InternalGearAttribute) =>
+              this.removeAttribute(internalGearAttribute)
+            }
+            changeGearMods={event => this.changeGearMods(event)}
+            removeMod={(internalGearMod: InternalGearMod) =>
+              this.removeMod(internalGearMod)
+            }
+            updateAttribute={(
+              event,
+              internalGearAttribute: InternalGearAttribute,
+            ) => this.updateAttribute(event, internalGearAttribute)}
+          />
+        </GenericFormWrap>
+      </Modal>
     );
   }
 }

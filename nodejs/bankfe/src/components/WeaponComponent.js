@@ -4,44 +4,61 @@ import React from 'react';
 
 import type { Weapon } from '../domain/Weapon';
 import * as weaponUiService from '../services/WeaponUiService';
+import * as st from '../styles/MainMenu';
+import { RelativeDiv } from '../styles/Body';
 
 type Props = {
   weapon: Weapon,
+  viewFilter: any,
   toggleTrash: Function,
   editWeapon: Function,
   deleteWeapon: Function,
 };
 
 export const WeaponComponent = (props: Props) => {
-  const { weapon, toggleTrash, editWeapon, deleteWeapon } = props;
+  const { weapon, viewFilter, toggleTrash, editWeapon, deleteWeapon } = props;
 
   return (
-    <div>
-      <h3>{weapon.score}</h3>
-      <p>{weapon.id}</p>
-      <p>{weapon.dmg}</p>
-      <p>{weapon.variant.name}</p>
-      <p>{weaponUiService.displayActiveTalent(weapon.activeTalent)}</p>
+    <RelativeDiv>
+      <st.TopRow>
+        <st.ToolsSection>
+          <st.PenBtn title="Edit" onClick={() => editWeapon(weapon)} />
+          <st.EjectBtn
+            title="Mark as trash"
+            onClick={() => toggleTrash(weapon)}
+          />
+          <st.TrashBtn title="Delete" onClick={() => deleteWeapon(weapon)} />
+        </st.ToolsSection>
+        <st.StatusSection>
+          <st.StatusText>
+            {weapon.variant.name} {weapon.score} {weapon.dmg}
+          </st.StatusText>
+        </st.StatusSection>
+      </st.TopRow>
 
-      {weapon.passiveTalents.length > 0 && (
-        <ul>
-          {weapon.passiveTalents.map((talent, index) => (
-            <li key={index}> {talent.name} </li>
-          ))}
-        </ul>
+      {viewFilter.talents === true && (
+        <st.TalentRowWrap>
+          <st.TalentRow>
+            <st.PassiveTSection>
+              {weapon.passiveTalents.length > 0 && (
+                <div>
+                  {weapon.passiveTalents.map((talent, index) => (
+                    <st.AttribText key={index}> {talent.name} </st.AttribText>
+                  ))}
+                </div>
+              )}
+              {weapon.passiveTalents.length === 0 && (
+                <div> No passive talents! </div>
+              )}
+            </st.PassiveTSection>
+            <st.ActiveTSection>
+              <st.AttribText>
+                {weaponUiService.displayActiveTalent(weapon.activeTalent)}
+              </st.AttribText>
+            </st.ActiveTSection>
+          </st.TalentRow>
+        </st.TalentRowWrap>
       )}
-      {weapon.passiveTalents.length === 0 && <p> No passive talents! </p>}
-
-      <p>{weaponUiService.displayTrash(weapon.trash)}</p>
-      <button type="button" onClick={() => editWeapon(weapon)}>
-        Edit
-      </button>
-      <button type="button" onClick={() => toggleTrash(weapon)}>
-        Toggle trash
-      </button>
-      <button type="button" onClick={() => deleteWeapon(weapon)}>
-        Delete
-      </button>
-    </div>
+    </RelativeDiv>
   );
 };
