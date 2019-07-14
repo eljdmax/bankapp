@@ -4,3 +4,4 @@
 node_modules/
 **/migrations/*.py
 **/.vscode
+*.code-workspace
