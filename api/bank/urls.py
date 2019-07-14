@@ -23,5 +23,6 @@ urlpatterns = [
 	path('weapon/activetalents/', WeaponsRest.processActiveTalents ),
 	path('weapon/passivetalents/', WeaponsRest.processPassiveTalents ),
 	
+	path('builds/', BuildsRest.processBuilds )
 	
 ]

@@ -89,6 +89,11 @@ class GearCreateSerializer(serializers.ModelSerializer):
 		child=serializers.IntegerField(),
 		required=False
 	)
+
+	buildIds = serializers.ListField(
+		child=serializers.IntegerField(),
+		required=False
+	)
 	
 	attributeIds = IdValue(many=True, required=False)
 	
@@ -138,6 +143,10 @@ class GearCreateSerializer(serializers.ModelSerializer):
 		gearAttributeData = None
 		if 'attributeIds' in validated_data:
 			gearAttributeData = validated_data.pop('attributeIds')
+
+		gearBuildData = None
+		if 'buildIds' in validated_data:
+			gearBuildData = validated_data.pop('buildIds')
 		
 		instance.score = validated_data.get('score', instance.score)
 		instance.armor = validated_data.get('armor', instance.armor)
@@ -169,7 +178,13 @@ class GearCreateSerializer(serializers.ModelSerializer):
 			for k in gearAttributeData:
 				attribute = Attribute.objects.get(pk=k.get('id'))
 				GearAttribute.objects.create(gear=instance, attribute=attribute, value=k.get('value'))
-				
+
+		if gearBuildData != None:
+			GearBuild.objects.filter(gear=instance).delete()
+			for k in gearBuildData:
+				build = Build.objects.get(pk=k)
+				GearBuild.objects.create(gear=instance, build=build)
+
 		instance.save()
 		
 		return instance
@@ -231,5 +246,11 @@ class ActiveGearTalentGetSerializer(serializers.ModelSerializer):
 class PassiveGearTalentGetSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = PassiveGearTalent
+		fields = '__all__'
+		depth = 1
+
+class BuildGetSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Build
 		fields = '__all__'
 		depth = 1

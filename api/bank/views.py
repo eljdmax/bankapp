@@ -251,3 +251,14 @@ class WeaponsRest:
 	def processPassiveTalents(request, *args, **kwargs):
 		view = WeaponsRest._GetPassiveWeaponTalents_.as_view()
 		return view(request, *args, **kwargs)
+
+class BuildsRest:
+	class _ListBuilds_(generics.ListAPIView):
+		serializer_class = BuildGetSerializer
+		queryset = Build.objects.all()
+
+	@csrf_exempt
+	@transaction.atomic
+	def processBuilds(request, *args, **kwargs):
+		view = BuildsRest._ListBuilds_.as_view()
+		return view(request, *args, **kwargs)

@@ -1,5 +1,14 @@
 from django.db import models
 
+## Builds
+class Build(models.Model):
+	#id
+	id = models.AutoField(primary_key=True)
+	#name
+	name = models.CharField(max_length=255, null=False)
+
+	def __str__(self):
+		return "Id: {} - Name: {}".format(self.id, self.name)
 
 ## Weapons
 class WeaponFamily(models.Model):
@@ -171,6 +180,13 @@ class Gear(models.Model):
         through_fields=('gear', 'attribute'),
     )
 	
+	# builds
+	builds = models.ManyToManyField(
+		Build,
+		through='GearBuild',
+		through_fields=('gear', 'build'),
+	)
+
 	def __str__(self):
 		return "Id: {} - Score: {}".format(self.id, self.score)
 		
@@ -191,3 +207,6 @@ class GearAttribute(models.Model):
 	attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE, null=False)
 	value = models.DecimalField(max_digits=10, decimal_places=2, null=False,default=0)
 	
+class GearBuild(models.Model):
+	gear = models.ForeignKey(Gear, on_delete=models.CASCADE, null=False)
+	build = models.ForeignKey(Build, on_delete=models.CASCADE, null=False)
