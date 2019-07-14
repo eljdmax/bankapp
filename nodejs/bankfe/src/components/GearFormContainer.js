@@ -114,10 +114,6 @@ export class GearFormContainer extends Component<Props, FormData> {
         value: [],
         valid: true,
       },
-      gearIsTrash: {
-        value: false,
-        valid: true,
-      },
     };
 
     this.subscriber = gearEditStore.subscribe((gears: Gear[]) => {
@@ -168,8 +164,6 @@ export class GearFormContainer extends Component<Props, FormData> {
             R.assocPath(['gearActiveTalent', 'valid'], true),
             R.assocPath(['gearPassiveTalents', 'value'], passiveTalents),
             R.assocPath(['gearPassiveTalents', 'valid'], true),
-            R.assocPath(['gearIsTrash', 'value'], gears[0].trash),
-            R.assocPath(['gearIsTrash', 'valid'], true),
           )(state);
         });
       }
@@ -345,7 +339,6 @@ export class GearFormContainer extends Component<Props, FormData> {
       },
     );
 
-    const trash = this.state.gearIsTrash.value;
 
     const isScoreValid = this.gearService.isScoreValid(gearScore);
     const isArmorValid = this.gearService.isArmorValid(gearArmor);
@@ -362,7 +355,6 @@ export class GearFormContainer extends Component<Props, FormData> {
         passiveTalentIds: gearPassiveTalents,
         modIds: gearMods,
         attributeIds: gearAttributes,
-        trash: trash,
       });
 
       if (submitStatus.success) {

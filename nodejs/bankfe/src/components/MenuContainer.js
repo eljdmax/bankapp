@@ -24,7 +24,6 @@ export class MenuContainer extends Component<Props> {
   }
 
   render() {
-    console.log('State: ', this.state);
     return (
       <MenuComponent data={this.state} selectMenu={v => this.selectMenu(v)} />
     );

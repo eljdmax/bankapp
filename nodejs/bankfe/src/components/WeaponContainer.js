@@ -27,7 +27,16 @@ export class WeaponContainer extends Component<Props> {
 
   toggleTrash(weapon: Weapon) {
     const updatedWeapon = this.weaponService.updateTrash(weapon, !weapon.trash);
-    this.weaponStore.updateWeapon(updatedWeapon);
+    let submitStatus = weaponRestService.postUpdateWeapon(updatedWeapon.id, {
+      score: updatedWeapon.score,
+      dmg: updatedWeapon.dmg,
+      variant: updatedWeapon.variant.id,
+      trash: updatedWeapon.trash,
+    });
+
+    if (!submitStatus.success) {
+      alert('An error occured!');
+    }
   }
 
   removeWeapon(weapon: Weapon) {

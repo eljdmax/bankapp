@@ -38,8 +38,6 @@ export class GearListContainer extends Component<Props, State> {
   gearType: NameId;
 
   constructor(props: Props) {
-    console.log('constructing gear list container');
-    console.log(gearStore);
 
     super(props);
     this.gearStore = gearStore;

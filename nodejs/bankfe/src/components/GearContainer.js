@@ -27,7 +27,18 @@ export class GearContainer extends Component<Props> {
 
   toggleTrash(gear: Gear) {
     const updatedGear = this.gearService.updateTrash(gear, !gear.trash);
-    this.gearStore.updateGear(updatedGear);
+    let submitStatus = gearRestService.postUpdateGear(updatedGear.id, {
+      score: updatedGear.score,
+      armor: updatedGear.armor,
+      type: updatedGear.type.id,
+      family: updatedGear.family.id,
+      trash: updatedGear.trash,
+    });
+
+    if (!submitStatus.success) {
+      alert('An error occured!');
+    }
+
   }
 
   removeGear(gear: Gear) {

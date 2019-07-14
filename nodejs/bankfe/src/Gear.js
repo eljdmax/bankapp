@@ -30,7 +30,6 @@ type Props = {};
 
 class Gear extends Component<Props> {
   render() {
-    console.log('rendering Gear');
 
     return (
       <div className="App">
