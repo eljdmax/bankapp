@@ -5,3 +5,11 @@ node_modules/
 **/migrations/*.py
 **/.vscode
 *.code-workspace
+*.log
+*.pot
+.env
+.env.staging
+local_settings.py
+media
+venv/
+staticfiles/*
