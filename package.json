@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "react-scripts build",
-    "heroku-prebuild": "NODE_ENV=production cd api/frontend/ && npm run build && cd ../.."
+    "postinstall": "ls"
   },
   "cacheDirectories": [
     "api/frontend/node_modules"
