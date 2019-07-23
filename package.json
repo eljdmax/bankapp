@@ -1,0 +1,23 @@
+{
+  "name": "bankfe",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ramda": "^0.26.1",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.5",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "build": "webpack --config react/webpack.config.js",
+    "postinstall": "npm run build"
+  },
+  "cacheDirectories": [
+    "api/frontend/node_modules"
+  ],
+  "license": "MIT",
+  "author": "jdmax",
+  "main": "index.js"
+}
