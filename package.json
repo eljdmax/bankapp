@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "react-scripts build",
-    "postinstall": "NODE_ENV=production cd api/frontend/ && npm run build && cd ../.."
+    "postinstall": "NODE_ENV=production npm run build"
   },
   "cacheDirectories": [
     "api/frontend/node_modules"
