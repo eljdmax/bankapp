@@ -11,7 +11,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "build": "webpack --config react/webpack.config.js",
+    "build": "react-scripts build",
     "postinstall": "npm run build"
   },
   "cacheDirectories": [
