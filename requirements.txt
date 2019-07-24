@@ -1,9 +1,0 @@
-Django==2.0.3
-django-cors-headers==3.0.1
-djangorestframework==3.9.4
-gunicorn==19.9.0
-mysql-connector-python==8.0.5
-protobuf==3.7.1
-pytz==2019.1
-six==1.12.0
-whitenoise==4.1.3
