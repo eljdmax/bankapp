@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "react-scripts build",
-    "postinstall": "ls"
+    "heroku-postbuild": "cd api/frontend && npm install && npm run build"
   },
   "cacheDirectories": [
     "api/frontend/node_modules"
