@@ -131,12 +131,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('MY_NAME','world'),
-        'USER': os.environ.get('MY_USER','root'),
-        'PASSWORD': os.environ.get('MY_PASS','admin'),
+        'USER': os.environ.get('MY_USER','worldadmin'),
+        'PASSWORD': os.environ.get('MY_PASS','worldroot'),
         'HOST':     os.environ.get('MY_HOST','localhost'),
-        'PORT':     os.environ.get('MY_PORT','3306')
+        'PORT':     ''
     }
 }
 
