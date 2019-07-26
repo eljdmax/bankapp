@@ -101,8 +101,13 @@ export const viewTalentsStore = NameIdStoreFactory();
 
 export const familyFilterStore = NameIdStoreFactory();
 export const trashFilterStore = NameIdStoreFactory();
+export const buildFilterStore = NameIdStoreFactory();
+export const starFilterStore = NameIdStoreFactory();
 
 export const orderByStore = NameIdStoreFactory();
 export const thenOrderByStore = NameIdStoreFactory();
 
 export const variantTypeFilterStore = NameIdStoreFactory();
+
+//Builds
+export const buildStore = NameIdStoreFactory();

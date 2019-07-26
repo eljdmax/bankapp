@@ -155,6 +155,8 @@ class Gear(models.Model):
 	armor = models.DecimalField(max_digits=6, decimal_places=2, null=False)
 	# is it trash
 	trash = models.BooleanField(default=False)
+	# is it star
+	star = models.BooleanField(default=False)
 	# gear type
 	type = models.ForeignKey(GearType, on_delete=models.CASCADE, null=False)
 	# gear family

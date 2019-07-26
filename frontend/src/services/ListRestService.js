@@ -13,6 +13,7 @@ import {
   yesNoStore,
   viewAttributesStore,
   viewTalentsStore,
+  buildStore,
 } from '../store/NameIdStore';
 import { restURL } from './RestServiceConfig';
 
@@ -147,6 +148,21 @@ export const fetchGearAttributeTypes = () => {
   }).then(response => {
     response.json().then(data => {
       gearAttributeTypeStore.addNameId(data);
+    });
+  });
+};
+
+export const fetchBuilds = () => {
+  fetch(restURL + '/builds/', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  }).then(response => {
+    response.json().then(data => {
+      buildStore.addNameId(data);
     });
   });
 };

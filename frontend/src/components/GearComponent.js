@@ -11,28 +11,41 @@ type Props = {
   gear: Gear,
   viewFilter: any,
   toggleTrash: Function,
+  toggleStar: Function,
   editGear: Function,
   deleteGear: Function,
+  linkGear: Function,
 };
 
 export const GearComponent = (props: Props) => {
-  const { gear, viewFilter, toggleTrash, editGear, deleteGear } = props;
+  const {
+    gear,
+    viewFilter,
+    toggleTrash,
+    toggleStar,
+    editGear,
+    deleteGear,
+    linkGear,
+  } = props;
 
   return (
     <RelativeDiv>
       <st.TopRow>
         <st.ToolsSection>
           <st.PenBtn title="Edit" onClick={() => editGear(gear)} />
+          <st.LinkBtn title="Link to Builds" onClick={() => linkGear(gear)} />
+          <st.StarBtn
+            title={gear.star === true ? 'Unmark star' : 'Mark as star'}
+            onClick={() => toggleStar(gear)}
+          />
           <st.EjectBtn
             title={gear.trash === true ? 'Unmark trash' : 'Mark as trash'}
             onClick={() => toggleTrash(gear)}
           />
           <st.TrashBtn title="Delete" onClick={() => deleteGear(gear)} />
         </st.ToolsSection>
-        <st.StatusSection isTrash={gear.trash === true}>
-          <st.StatusText>
-            {gear.type.name} {gear.family.name} {gear.score} {gear.armor}
-          </st.StatusText>
+        <st.StatusSection status={gearUiService.getStatus(gear)}>
+          <st.StatusText>{gearUiService.displayStatus(gear)}</st.StatusText>
         </st.StatusSection>
       </st.TopRow>
 

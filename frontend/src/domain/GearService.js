@@ -8,6 +8,7 @@ import * as validators from './Validators';
 export type GearService = {
   createGear(gearFields: any): ?Gear,
   updateTrash(gear: Gear, trash: boolean): Gear,
+  updateStar(gear: Gear, star: boolean): Gear,
   isIdValid(id: number): boolean,
   isScoreValid(score: number): boolean,
   isArmorValid(armor: number): boolean,
@@ -21,12 +22,14 @@ export const createGear = (gearFields: any): ?Gear => {
     score,
     armor,
     trash,
+    star,
     type,
     family,
     activeTalent,
     passiveTalents,
     gearAttributes,
     gearMods,
+    builds,
   } = gearFields;
   return isIdValid(id) &&
     isScoreValid(score) &&
@@ -38,23 +41,39 @@ export const createGear = (gearFields: any): ?Gear => {
         score: score,
         armor: armor,
         trash: trash,
+        star: star,
         type: type,
         family: family,
         activeTalent: activeTalent,
         passiveTalents: passiveTalents,
         gearAttributes: gearAttributes,
         gearMods: gearMods,
+        builds: builds,
       })
     : null;
 };
 
-export const updateTrash = (gear: Gear, trash: boolean) =>
-  validators.isObject(gear)
+export const updateTrash = (gear: Gear, trash: boolean) => {
+  const star = trash ? false : gear.star;
+  return validators.isObject(gear)
     ? Object.freeze({
         ...gear,
         trash: trash,
+        star: star,
       })
     : gear;
+};
+
+export const updateStar = (gear: Gear, star: boolean) => {
+  const trash = star ? false : gear.trash;
+  return validators.isObject(gear)
+    ? Object.freeze({
+        ...gear,
+        star: star,
+        trash: trash,
+      })
+    : gear;
+};
 
 export const isIdValid = (id: number) =>
   R.allPass([validators.isNumber, validators.isGreaterThan(0)])(id);
@@ -74,6 +93,7 @@ export const isFamilyValid = (familyId: number) =>
 export const GearServiceFactory = () => ({
   createGear,
   updateTrash,
+  updateStar,
   isIdValid,
   isScoreValid,
   isArmorValid,

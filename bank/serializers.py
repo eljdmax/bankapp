@@ -156,6 +156,9 @@ class GearCreateSerializer(serializers.ModelSerializer):
 		
 		if ('trash' in validated_data):
 			instance.trash = validated_data.get('trash', instance.trash)
+
+		if ('star' in validated_data):
+			instance.star = validated_data.get('star', instance.star)
 			
 		if ('activeTalent' in validated_data):
 			instance.activeTalent = validated_data.get('activeTalent', instance.activeTalent)

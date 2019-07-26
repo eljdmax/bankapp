@@ -128,8 +128,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
-print( os.environ.get('DATABASE_URL','why  ') )
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 

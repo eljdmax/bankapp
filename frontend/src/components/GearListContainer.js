@@ -14,6 +14,8 @@ import {
   leftMenuFilterStore,
   familyFilterStore,
   trashFilterStore,
+  starFilterStore,
+  buildFilterStore,
   orderByStore,
   thenOrderByStore,
 } from '../store/NameIdStore';
@@ -31,6 +33,8 @@ export class GearListContainer extends Component<Props, State> {
   viewTalentsSubscriber: Function;
   familyFilterSubscriber: Function;
   trashFilterSubscriber: Function;
+  starFilterSubscriber: Function;
+  buildFilterSubscriber: Function;
   orderBySubscriber: Function;
   thenOrderBySubscriber: Function;
 
@@ -38,7 +42,6 @@ export class GearListContainer extends Component<Props, State> {
   gearType: NameId;
 
   constructor(props: Props) {
-
     super(props);
     this.gearStore = gearStore;
     this.state = {
@@ -51,6 +54,8 @@ export class GearListContainer extends Component<Props, State> {
       extraFilter: {
         familyId: '',
         trash: '',
+        star: '',
+        build: '',
       },
       orderFilter: {
         by: '',
@@ -106,6 +111,26 @@ export class GearListContainer extends Component<Props, State> {
       },
     );
 
+    this.starFilterSubscriber = starFilterStore.subscribe(
+      (nameIds: NameId[]) => {
+        let val = '';
+        if (nameIds.length > 0) {
+          val = Number(nameIds[0].id) === 0;
+        }
+        this.setState(R.assocPath(['extraFilter', 'star'], val));
+      },
+    );
+
+    this.buildFilterSubscriber = buildFilterStore.subscribe(
+      (nameIds: NameId[]) => {
+        let val = '';
+        if (nameIds.length > 0) {
+          val = Number(nameIds[0].id);
+        }
+        this.setState(R.assocPath(['extraFilter', 'build'], val));
+      },
+    );
+
     this.orderBySubscriber = orderByStore.subscribe((nameIds: NameId[]) => {
       let val = '';
       if (nameIds.length > 0) {
@@ -134,6 +159,8 @@ export class GearListContainer extends Component<Props, State> {
     viewTalentsStore.unsubscribe(this.viewTalentsSubscriber);
     familyFilterStore.unsubscribe(this.familyFilterSubscriber);
     trashFilterStore.unsubscribe(this.trashFilterSubscriber);
+    starFilterStore.unsubscribe(this.starFilterSubscriber);
+    buildFilterStore.unsubscribe(this.buildFilterSubscriber);
     orderByStore.unsubscribe(this.orderBySubscriber);
     thenOrderByStore.unsubscribe(this.thenOrderBySubscriber);
   }

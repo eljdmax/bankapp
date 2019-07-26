@@ -19,6 +19,7 @@ weaponRestService.fetchAllWeapons();
 listRestService.fetchWeaponVariants();
 listRestService.fetchWeaponActiveTalents();
 listRestService.fetchWeaponPassiveTalents();
+
 listRestService.setYesNoStore();
 listRestService.setFilters();
 

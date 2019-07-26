@@ -13,6 +13,41 @@ export const displayActiveTalent = (activeGearTalent: ActiveGearTalent) => {
   return activeGearTalent ? activeGearTalent.name : 'No Talent';
 };
 
+export const getStatus = (gear: Gear) => {
+  if (gear.trash === true) {
+    return 'trash';
+  }
+  if (gear.star === true) {
+    return 'star';
+  }
+  return '';
+};
+
+export const displayStatus = (gear: Gear) => {
+  let status: String = '';
+  status =
+    gear.type.name +
+    ' ' +
+    gear.family.name +
+    ' ' +
+    gear.score +
+    ' ' +
+    gear.armor;
+
+  if (gear.builds.length > 0) {
+    status +=
+      ' [' +
+      gear.builds
+        .map(build => {
+          return build.name;
+        })
+        .join(' / ') +
+      ']';
+  }
+
+  return status;
+};
+
 export const compareGearBy = (
   f: string[] = ['score'],
   asc: boolean = false,
@@ -61,4 +96,23 @@ export const filterGearBy = (value: number, f: string[] = ['type', 'id']) => {
   return (item: any) => {
     return R.path(f, item) === value;
   };
+};
+
+export const filterGearArrayBy = (
+  value: number,
+  f: string[] = ['builds'],
+  sf: string = 'id',
+) => {
+  if (value === 0) {
+    return (item: any) => {
+      return R.path(f, item).length === 0;
+    };
+  } else {
+    return (item: any) => {
+      return (
+        R.find(R.propSatisfies(x => x === value, sf))(R.path(f, item)) !==
+        undefined
+      );
+    };
+  }
 };

@@ -15,6 +15,7 @@ import { MenuContainer } from './components/MenuContainer';
 import { LeftMenuContainer } from './components/LeftMenuContainer';
 import { SubMenuContainer } from './components/SubMenuContainer';
 import { GearSettingsContainer } from './components/GearSettingsContainer';
+import { LinkEntityContainer } from './components/LinkEntityContainer';
 
 gearRestService.fetchAllGears();
 listRestService.fetchGearTypes();
@@ -23,6 +24,7 @@ listRestService.fetchGearAttributeTypes();
 listRestService.fetchGearAttributes();
 listRestService.fetchGearActiveTalents();
 listRestService.fetchGearPassiveTalents();
+listRestService.fetchBuilds();
 listRestService.setYesNoStore();
 listRestService.setFilters();
 
@@ -30,7 +32,6 @@ type Props = {};
 
 class Gear extends Component<Props> {
   render() {
-
     return (
       <div className="App">
         <Banner />
@@ -40,6 +41,7 @@ class Gear extends Component<Props> {
         <GearListContainer />
         <GearFormContainer />
         <GearSettingsContainer />
+        <LinkEntityContainer />
       </div>
     );
   }

@@ -15,6 +15,8 @@ type Props = {
   toggleViewTalents: Function,
   changeFilterFamily: Function,
   changeFilterTrash: Function,
+  changeFilterStar: Function,
+  changeFilterBuild: Function,
   changeOrderBy: Function,
   changeOrderThenBy: Function,
 };
@@ -29,6 +31,8 @@ export const GearSettingsComponent = (props: Props) => {
     toggleViewTalents,
     changeFilterFamily,
     changeFilterTrash,
+    changeFilterStar,
+    changeFilterBuild,
     changeOrderBy,
     changeOrderThenBy,
   } = props;
@@ -101,6 +105,43 @@ export const GearSettingsComponent = (props: Props) => {
               >
                 <option value=""> -- select a family -- </option>
                 {data.gearFamilyList.map((nameId: NameId, index) => (
+                  <option key={index} value={nameId.id}>
+                    {nameId.name}
+                  </option>
+                ))}
+              </select>
+            </st.FormRow>
+            <st.FormRow>
+              <label htmlFor="gear-build">Build</label>
+              <select
+                type="text"
+                id="gear-build"
+                name="gearBuild"
+                autoComplete="off"
+                value={data.filterSection.build}
+                onChange={changeFilterBuild}
+              >
+                <option value=""> -- All -- </option>
+                <option value="0"> -- None -- </option>
+                {data.buildList.map((nameId: NameId, index) => (
+                  <option key={index} value={nameId.id}>
+                    {nameId.name}
+                  </option>
+                ))}
+              </select>
+            </st.FormRow>
+            <st.FormRow>
+              <label htmlFor="gear-star">Star</label>
+              <select
+                type="text"
+                id="gear-star"
+                name="gearStar"
+                autoComplete="off"
+                value={data.filterSection.star}
+                onChange={changeFilterStar}
+              >
+                <option value=""> -- All -- </option>
+                {data.isTrashList.map((nameId: NameId, index) => (
                   <option key={index} value={nameId.id}>
                     {nameId.name}
                   </option>
