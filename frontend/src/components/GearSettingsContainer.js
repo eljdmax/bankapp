@@ -19,8 +19,11 @@ import {
   viewTalentsStore,
   familyFilterStore,
   trashFilterStore,
+  starFilterStore,
+  buildFilterStore,
   orderByStore,
   thenOrderByStore,
+  buildStore,
 } from '../store/NameIdStore';
 
 type Props = {};
@@ -30,6 +33,7 @@ export class GearSettingsContainer extends Component<Props> {
   familySubscriber: Function;
   yesNoSubscriber: Function;
   attributeSubscriber: Function;
+  buildSubscriber: Function;
 
   constructor(props: Props) {
     super(props);
@@ -40,6 +44,7 @@ export class GearSettingsContainer extends Component<Props> {
       gearFamilyList: gearFamilyStore.getState(),
       gearAttributeList: gearAttributeStore.getState(),
       isTrashList: yesNoStore.getState(),
+      buildList: buildStore.getState(),
       viewSection: {
         talents: true,
         attributes: true,
@@ -47,6 +52,8 @@ export class GearSettingsContainer extends Component<Props> {
       filterSection: {
         family: '',
         trash: '',
+        star: '',
+        build: '',
       },
       orderSection: {
         by: '',
@@ -71,6 +78,10 @@ export class GearSettingsContainer extends Component<Props> {
         this.setState(R.assocPath(['gearAttributeList'], nameIds));
       },
     );
+
+    this.buildSubscriber = buildStore.subscribe((nameIds: NameId[]) => {
+      this.setState(R.assocPath(['buildList'], nameIds));
+    });
   }
 
   clearModal() {}
@@ -130,6 +141,32 @@ export class GearSettingsContainer extends Component<Props> {
     }
   }
 
+  changeFilterStar(event: Event) {
+    let val = R.path(['target', 'value'], event);
+    if (val !== this.state.filterSection.star) {
+      if (val !== '') {
+        starFilterStore.replaceNameId({ id: val, name: 'any' });
+      } else {
+        starFilterStore.clear();
+      }
+
+      this.setState(R.assocPath(['filterSection', 'star'], val));
+    }
+  }
+
+  changeFilterBuild(event: Event) {
+    let val = R.path(['target', 'value'], event);
+    if (val !== this.state.filterSection.build) {
+      if (val !== '') {
+        buildFilterStore.replaceNameId({ id: val, name: 'any' });
+      } else {
+        buildFilterStore.clear();
+      }
+
+      this.setState(R.assocPath(['filterSection', 'build'], val));
+    }
+  }
+
   changeOrderBy(event: Event) {
     let val = R.path(['target', 'value'], event);
     if (val !== this.state.orderSection.by) {
@@ -161,6 +198,7 @@ export class GearSettingsContainer extends Component<Props> {
     gearFamilyStore.unsubscribe(this.familySubscriber);
     yesNoStore.unsubscribe(this.yesNoSubscriber);
     gearAttributeStore.unsubscribe(this.attributeSubscriber);
+    buildStore.unsubscribe(this.buildSubscriber);
   }
 
   render() {
@@ -180,6 +218,8 @@ export class GearSettingsContainer extends Component<Props> {
             toggleViewTalents={event => this.toggleViewTalents(event)}
             changeFilterFamily={event => this.changeFilterFamily(event)}
             changeFilterTrash={event => this.changeFilterTrash(event)}
+            changeFilterBuild={event => this.changeFilterBuild(event)}
+            changeFilterStar={event => this.changeFilterStar(event)}
             changeOrderBy={event => this.changeOrderBy(event)}
             changeOrderThenBy={event => this.changeOrderThenBy(event)}
           />

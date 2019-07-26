@@ -4,6 +4,8 @@ import styled, { css } from 'styled-components';
 
 import deletePng from '../images/delete.png';
 import arrowMinPng from '../images/arrow-minimise.png';
+import tickPng from '../images/tick.png';
+import cancelPng from '../images/cancel.png';
 
 export const SettingsWrap = styled.div`
   position: absolute;
@@ -139,4 +141,44 @@ export const StatusText = styled.div`
   align-items: center;
 
   color: #000000;
+`;
+
+export const ButtonsRow = styled.div`
+  height: 30px;
+  position: relative;
+  margin-bottom: 5px;
+  border: 2px solid #005e04;
+  box-sizing: border-box;
+`;
+
+export const TickBtn = styled.button`
+  width: 24px;
+  height: 24px;
+
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  cursor: pointer;
+
+  background: url(${tickPng});
+`;
+
+export const CancelBtn = styled.button`
+  width: 24px;
+  height: 24px;
+
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  cursor: pointer;
+
+  background: url(${cancelPng});
 `;

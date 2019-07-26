@@ -6,7 +6,7 @@ import type { Gear } from '../domain/Gear';
 import type { GearService } from '../domain/GearService';
 import type { GearStore } from '../store/GearStore';
 import { gearService } from '../domain/GearService';
-import { gearStore, gearEditStore } from '../store/GearStore';
+import { gearStore, gearEditStore, gearLinkStore } from '../store/GearStore';
 import { GearComponent } from './GearComponent';
 import * as gearRestService from '../services/GearRestService';
 
@@ -33,12 +33,28 @@ export class GearContainer extends Component<Props> {
       type: updatedGear.type.id,
       family: updatedGear.family.id,
       trash: updatedGear.trash,
+      star: updatedGear.star,
     });
 
     if (!submitStatus.success) {
       alert('An error occured!');
     }
+  }
 
+  toggleStar(gear: Gear) {
+    const updatedGear = this.gearService.updateStar(gear, !gear.star);
+    let submitStatus = gearRestService.postUpdateGear(updatedGear.id, {
+      score: updatedGear.score,
+      armor: updatedGear.armor,
+      type: updatedGear.type.id,
+      family: updatedGear.family.id,
+      trash: updatedGear.trash,
+      star: updatedGear.star,
+    });
+
+    if (!submitStatus.success) {
+      alert('An error occured!');
+    }
   }
 
   removeGear(gear: Gear) {
@@ -49,14 +65,20 @@ export class GearContainer extends Component<Props> {
     gearEditStore.addGear(gear);
   }
 
+  linkGear(gear: Gear) {
+    gearLinkStore.addGear(gear);
+  }
+
   render() {
     return (
       <GearComponent
         gear={this.props.gear}
         viewFilter={this.props.viewFilter}
         toggleTrash={(gear: Gear) => this.toggleTrash(gear)}
+        toggleStar={(gear: Gear) => this.toggleStar(gear)}
         editGear={(gear: Gear) => this.editGear(gear)}
         deleteGear={(gear: Gear) => this.removeGear(gear)}
+        linkGear={(gear: Gear) => this.linkGear(gear)}
       />
     );
   }

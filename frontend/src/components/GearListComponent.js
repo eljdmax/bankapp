@@ -8,6 +8,8 @@ import * as gearUiService from '../services/GearUiService';
 
 import { MainMenu, MainRow } from '../styles/MainMenu';
 
+import * as R from 'ramda';
+
 type Props = {
   gears: Gear[],
   gearType: number,
@@ -31,6 +33,18 @@ export const GearListComponent = (props: Props) => {
   if (extraFilter.trash !== '') {
     filteredGears = filteredGears.filter(
       gearUiService.filterGearBy(extraFilter.trash, ['trash']),
+    );
+  }
+
+  if (extraFilter.star !== '') {
+    filteredGears = filteredGears.filter(
+      gearUiService.filterGearBy(extraFilter.star, ['star']),
+    );
+  }
+
+  if (extraFilter.build !== '') {
+    filteredGears = filteredGears.filter(
+      gearUiService.filterGearArrayBy(extraFilter.build),
     );
   }
 

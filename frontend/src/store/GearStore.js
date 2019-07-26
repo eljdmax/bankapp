@@ -86,3 +86,5 @@ export const GearStoreFactory = () => {
 export const gearStore = GearStoreFactory();
 
 export const gearEditStore = GearStoreFactory();
+
+export const gearLinkStore = GearStoreFactory();

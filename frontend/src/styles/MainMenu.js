@@ -3,9 +3,11 @@
 import styled, { css } from 'styled-components';
 
 import toolsBorder from '../images/tools_border.png';
-import ejectBtnPng from '../images/eject.png';
+import ejectBtnPng from '../images/weather-snow.png';
+import starBtnPng from '../images/star-outline.png';
 import penBtnPng from '../images/pen.png';
 import trashBtnPng from '../images/trash.png';
+import linkBtnPng from '../images/link-outline.png';
 
 export const MainMenu = styled.div`
   position: absolute;
@@ -36,52 +38,69 @@ export const TopRow = styled.div`
 
 export const ToolsSection = styled.div`
   position: absolute;
-  width: 86px;
+  width: 126px;
   height: 25px;
   right: 7px;
   top: 4px;
 
-  background: url(${toolsBorder});
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  border: 2px solid #fd5e04;
+  box-sizing: border-box;
 `;
 
 export const PenBtn = styled.div`
-  position: absolute;
-  width: 18.49px;
+  position: relative;
+  width: 19px;
   height: 20px;
-  right: 56.41px;
-  top: 2px;
   cursor: pointer;
 
   background: url(${penBtnPng});
 `;
 
 export const EjectBtn = styled.div`
-  position: absolute;
-  width: 18.49px;
+  position: relative;
+  width: 19px;
   height: 20px;
-  right: 31.44px;
-  top: 2px;
   cursor: pointer;
 
   background: url(${ejectBtnPng});
 `;
 
-export const TrashBtn = styled.div`
-  position: absolute;
-  width: 18.49px;
+export const StarBtn = styled.div`
+  position: relative;
+  width: 19px;
   height: 20px;
-  right: 6.47px;
-  top: 2px;
+  cursor: pointer;
+
+  background: url(${starBtnPng});
+`;
+
+export const TrashBtn = styled.div`
+  position: relative;
+  width: 19px;
+  height: 20px;
   cursor: pointer;
 
   background: url(${trashBtnPng});
+`;
+
+export const LinkBtn = styled.div`
+  position: relative;
+  width: 19px;
+  height: 20px;
+  cursor: pointer;
+
+  background: url(${linkBtnPng});
 `;
 
 export const StatusSection = styled.div`
   position: absolute;
   height: 25px;
   left: 82px;
-  right: 101px;
+  right: 141px;
   top: 4px;
 
   background: none;
@@ -89,12 +108,23 @@ export const StatusSection = styled.div`
   border: 2px solid #fd5e04;
   box-sizing: border-box;
 
-  ${props =>
-    props.isTrash &&
-    props.isTrash === true &&
-    css`
-      background: #555555;
-    `}
+  ${props => {
+    if (!props.status) {
+      return;
+    }
+
+    if (props.status === 'trash') {
+      return css`
+        background: #555555;
+      `;
+    }
+
+    if (props.status === 'star') {
+      return css`
+        background: #339933;
+      `;
+    }
+  }}
 `;
 
 export const StatusText = styled.div`

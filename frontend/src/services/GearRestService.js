@@ -17,6 +17,8 @@ export const gearRestToObj = (data: any) => {
     gearAttributes: data.gearAttributes,
     gearMods: data.gearMods,
     trash: data.trash,
+    star: data.star,
+    builds: data.builds,
   };
 };
 
