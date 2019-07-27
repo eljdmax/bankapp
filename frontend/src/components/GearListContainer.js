@@ -43,6 +43,7 @@ export class GearListContainer extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+
     this.gearStore = gearStore;
     this.state = {
       gears: gearStore.getState(),
@@ -166,6 +167,6 @@ export class GearListContainer extends Component<Props, State> {
   }
 
   render() {
-    return <GearListComponent {...this.state} />;
+    return <GearListComponent {...this.state} cookies={this.props.cookies} />;
   }
 }

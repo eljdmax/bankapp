@@ -3,7 +3,7 @@
 import type { WeaponFormData, Weapon } from '../domain/Weapon';
 import { weaponStore } from '../store/WeaponStore';
 import { weaponService } from '../domain/WeaponService';
-import { restURL } from './RestServiceConfig';
+import { getDefaultHeaders, restURL } from './RestServiceConfig';
 
 export const weaponRestToObj = (data: any) => {
   return {
@@ -17,16 +17,13 @@ export const weaponRestToObj = (data: any) => {
   };
 };
 
-export const fetchAllWeapons = () => {
+export const fetchAllWeapons = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/weapons/', {
     method: 'GET',
     //body: JSON.stringify(userData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
+    weaponStore.clear();
     response.json().then(data => {
       let newWeapons = [];
       newWeapons = data.map((weaponRaw, index) => {
@@ -45,15 +42,15 @@ export const fetchAllWeapons = () => {
   return true;
 };
 
-export const fetchWeapon = (id: number, update: boolean) => {
+export const fetchWeapon = (
+  cookies = { csrftoken: '' },
+  id: number,
+  update: boolean,
+) => {
   fetch(restURL + '/weapon/' + id + '/', {
     method: 'GET',
     //body: JSON.stringify(userData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
     response.json().then(data => {
       const newWeapon = weaponService.createWeapon(weaponRestToObj(data));
@@ -74,6 +71,7 @@ export const fetchWeapon = (id: number, update: boolean) => {
 };
 
 export const postUpdateWeapon = (
+  cookies = { csrftoken: '' },
   id: number,
   weaponFormData: WeaponFormData,
 ) => {
@@ -89,29 +87,21 @@ export const postUpdateWeapon = (
   fetch(url, {
     method: method,
     body: JSON.stringify(weaponFormData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
     response.json().then(data => {
-      fetchWeapon(data.id, id > 0);
+      fetchWeapon(cookies, data.id, id > 0);
     });
   });
 
   return ret;
 };
 
-export const deleteWeapon = (weapon: Weapon) => {
+export const deleteWeapon = (cookies = { csrftoken: '' }, weapon: Weapon) => {
   fetch(restURL + '/weapon/' + weapon.id + '/', {
     method: 'DELETE',
     //body: JSON.stringify(weaponFormData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
     console.log('response ', response);
     if (response.status === 204) {

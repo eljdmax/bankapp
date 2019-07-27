@@ -16,10 +16,11 @@ type Props = {
   viewFilter: any,
   extraFilter: any,
   orderFilter: any,
+  cookies: any,
 };
 
 export const GearListComponent = (props: Props) => {
-  const { gears, gearType, viewFilter, extraFilter, orderFilter } = props;
+  const { gears, gearType, viewFilter, extraFilter, orderFilter, cookies } = props;
 
   //gears.sort( gearUiService.compareGearBy(['id'],true) );
   let filteredGears = gears.filter(gearUiService.filterGearBy(gearType.id));
@@ -66,7 +67,7 @@ export const GearListComponent = (props: Props) => {
     <MainMenu>
       {filteredGears.map((gear: Gear, index) => (
         <MainRow key={index} keyIndex={index}>
-          <GearContainer gear={gear} key={index} viewFilter={viewFilter} />
+          <GearContainer gear={gear} key={index} viewFilter={viewFilter} cookies={cookies} />
         </MainRow>
       ))}
     </MainMenu>

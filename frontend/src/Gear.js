@@ -17,20 +17,24 @@ import { SubMenuContainer } from './components/SubMenuContainer';
 import { GearSettingsContainer } from './components/GearSettingsContainer';
 import { LinkEntityContainer } from './components/LinkEntityContainer';
 
-gearRestService.fetchAllGears();
-listRestService.fetchGearTypes();
-listRestService.fetchGearFamilies();
-listRestService.fetchGearAttributeTypes();
-listRestService.fetchGearAttributes();
-listRestService.fetchGearActiveTalents();
-listRestService.fetchGearPassiveTalents();
-listRestService.fetchBuilds();
-listRestService.setYesNoStore();
-listRestService.setFilters();
+import { withCookies, Cookies } from 'react-cookie';
 
 type Props = {};
 
 class Gear extends Component<Props> {
+  constructor(props: Props) {
+    super(props);
+    gearRestService.fetchAllGears(this.props.cookies.cookies);
+    listRestService.fetchGearTypes(this.props.cookies.cookies);
+    listRestService.fetchGearFamilies(this.props.cookies.cookies);
+    listRestService.fetchGearAttributeTypes(this.props.cookies.cookies);
+    listRestService.fetchGearAttributes(this.props.cookies.cookies);
+    listRestService.fetchGearActiveTalents(this.props.cookies.cookies);
+    listRestService.fetchGearPassiveTalents(this.props.cookies.cookies);
+    listRestService.fetchBuilds(this.props.cookies.cookies);
+    listRestService.setYesNoStore();
+    listRestService.setFilters();
+  }
   render() {
     return (
       <div className="App">
@@ -38,13 +42,13 @@ class Gear extends Component<Props> {
         <MenuContainer />
         <SubMenuContainer />
         <LeftMenuContainer />
-        <GearListContainer />
-        <GearFormContainer />
+        <GearListContainer cookies={this.props.cookies} />
+        <GearFormContainer cookies={this.props.cookies} />
         <GearSettingsContainer />
-        <LinkEntityContainer />
+        <LinkEntityContainer cookies={this.props.cookies} />
       </div>
     );
   }
 }
 
-export default Gear;
+export default withCookies(Gear);
