@@ -13,6 +13,7 @@ import * as gearRestService from '../services/GearRestService';
 type Props = {
   gear: Gear,
   viewFilter: any,
+  cookies: any,
 };
 
 export class GearContainer extends Component<Props> {
@@ -27,7 +28,7 @@ export class GearContainer extends Component<Props> {
 
   toggleTrash(gear: Gear) {
     const updatedGear = this.gearService.updateTrash(gear, !gear.trash);
-    let submitStatus = gearRestService.postUpdateGear(updatedGear.id, {
+    let submitStatus = gearRestService.postUpdateGear(this.props.cookies.cookies, updatedGear.id, {
       score: updatedGear.score,
       armor: updatedGear.armor,
       type: updatedGear.type.id,
@@ -43,7 +44,7 @@ export class GearContainer extends Component<Props> {
 
   toggleStar(gear: Gear) {
     const updatedGear = this.gearService.updateStar(gear, !gear.star);
-    let submitStatus = gearRestService.postUpdateGear(updatedGear.id, {
+    let submitStatus = gearRestService.postUpdateGear(this.props.cookies.cookies, updatedGear.id, {
       score: updatedGear.score,
       armor: updatedGear.armor,
       type: updatedGear.type.id,
@@ -58,7 +59,7 @@ export class GearContainer extends Component<Props> {
   }
 
   removeGear(gear: Gear) {
-    gearRestService.deleteGear(gear);
+    gearRestService.deleteGear(this.props.cookies.cookies,gear);
   }
 
   editGear(gear: Gear) {

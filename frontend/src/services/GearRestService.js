@@ -3,7 +3,7 @@
 import type { GearFormData, Gear } from '../domain/Gear';
 import { gearStore } from '../store/GearStore';
 import { gearService } from '../domain/GearService';
-import { restURL } from './RestServiceConfig';
+import { getDefaultHeaders, restURL } from './RestServiceConfig';
 
 export const gearRestToObj = (data: any) => {
   return {
@@ -22,16 +22,13 @@ export const gearRestToObj = (data: any) => {
   };
 };
 
-export const fetchAllGears = () => {
+export const fetchAllGears = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/gears/', {
     method: 'GET',
     //body: JSON.stringify(userData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
+    gearStore.clear();
     response.json().then(data => {
       let newGears = data.map((gearRaw, index) => {
         const newGear = gearService.createGear(gearRestToObj(gearRaw));
@@ -47,15 +44,15 @@ export const fetchAllGears = () => {
   return true;
 };
 
-export const fetchGear = (id: number, update: boolean) => {
+export const fetchGear = (
+  cookies = { csrftoken: '' },
+  id: number,
+  update: boolean,
+) => {
   fetch(restURL + '/gear/' + id + '/', {
     method: 'GET',
     //body: JSON.stringify(userData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
     response.json().then(data => {
       const newGear = gearService.createGear(gearRestToObj(data));
@@ -75,7 +72,11 @@ export const fetchGear = (id: number, update: boolean) => {
   return true;
 };
 
-export const postUpdateGear = (id: number, gearFormData: GearFormData) => {
+export const postUpdateGear = (
+  cookies = { csrftoken: '' },
+  id: number,
+  gearFormData: GearFormData,
+) => {
   let ret = { success: true, msg: '' };
 
   let url = restURL + '/gear/';
@@ -88,29 +89,21 @@ export const postUpdateGear = (id: number, gearFormData: GearFormData) => {
   fetch(url, {
     method: method,
     body: JSON.stringify(gearFormData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
     response.json().then(data => {
-      fetchGear(data.id, id > 0);
+      fetchGear(cookies, data.id, id > 0);
     });
   });
 
   return ret;
 };
 
-export const deleteGear = (gear: Gear) => {
+export const deleteGear = (cookies = { csrftoken: '' }, gear: Gear) => {
   fetch(restURL + '/gear/' + gear.id + '/', {
     method: 'DELETE',
     //body: JSON.stringify(gearFormData),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers: getDefaultHeaders(cookies),
   }).then(response => {
     console.log('response ', response);
     if (response.status === 204) {

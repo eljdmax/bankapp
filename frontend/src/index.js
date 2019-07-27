@@ -6,21 +6,23 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-
+import { CookiesProvider } from 'react-cookie';
 import './index.css';
 import Gear from './Gear';
 import Weapon from './Weapon';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
+  <CookiesProvider>
   <Router>
     <Switch>
       <Redirect from="/" exact to="/gear/" />
-      <Route path="/gear/" component={Gear} />
+      <Route path="/gear/"  component={Gear} />
       <Route path="/weapon/" component={Weapon} />
       <Route component={NoMatch} />
     </Switch>
-  </Router>,
+  </Router>
+  </CookiesProvider>,
   document.getElementById('root'),
 );
 

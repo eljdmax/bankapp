@@ -93,7 +93,7 @@ export class LinkEntityContainer extends Component<Props> {
     const gearType = this.state.gear.type.id;
     const gearFamily = this.state.gear.family.id;
 
-    const submitStatus = gearRestService.postUpdateGear(this.state.gear.id, {
+    const submitStatus = gearRestService.postUpdateGear(this.props.cookies.cookies, this.state.gear.id, {
       score: gearScore,
       armor: gearArmor,
       type: gearType,

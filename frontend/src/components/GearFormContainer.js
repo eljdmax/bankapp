@@ -346,7 +346,7 @@ export class GearFormContainer extends Component<Props, FormData> {
     const isFamilyValid = this.gearService.isFamilyValid(gearFamily);
 
     if (isScoreValid && isArmorValid && isTypeValid && isFamilyValid) {
-      let submitStatus = gearRestService.postUpdateGear(this.state.gearId, {
+      let submitStatus = gearRestService.postUpdateGear(this.props.cookies.cookies, this.state.gearId, {
         score: gearScore,
         armor: gearArmor,
         type: gearType,

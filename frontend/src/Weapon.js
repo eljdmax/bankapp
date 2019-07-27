@@ -15,17 +15,22 @@ import { LeftMenuContainer } from './components/LeftMenuContainer';
 import { SubMenuContainer } from './components/SubMenuContainer';
 import { WeaponSettingsContainer } from './components/WeaponSettingsContainer';
 
-weaponRestService.fetchAllWeapons();
-listRestService.fetchWeaponVariants();
-listRestService.fetchWeaponActiveTalents();
-listRestService.fetchWeaponPassiveTalents();
-
-listRestService.setYesNoStore();
-listRestService.setFilters();
+import { withCookies, Cookies } from 'react-cookie';
 
 type Props = {};
 
 class Weapon extends Component<Props> {
+  constructor(props: Props) {
+    super(props);
+    weaponRestService.fetchAllWeapons();
+    listRestService.fetchWeaponVariants();
+    listRestService.fetchWeaponActiveTalents();
+    listRestService.fetchWeaponPassiveTalents();
+
+    listRestService.setYesNoStore();
+    listRestService.setFilters();
+  }
+
   render() {
     return (
       <div className="App">
@@ -41,4 +46,4 @@ class Weapon extends Component<Props> {
   }
 }
 
-export default Weapon;
+export default withCookies(Weapon);
