@@ -11,7 +11,7 @@ export const GenericFormWrap = styled.div`
   width: 457px;
   min-height: 250px;
   left: calc(50% - 457px / 2 + 38px);
-  top: calc(50% - 340px / 2 + 36px);
+  top: calc(50% - 500px / 2 + 36px);
   background: #c4c4c4;
   border-radius: 8px;
 `;
@@ -37,6 +37,15 @@ export const FormRow = styled.div`
 
   border: 2px solid #005e04;
   box-sizing: border-box;
+`;
+
+export const FormScrolledVal = styled.div`
+  max-height: 120px;
+  position: relative;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const ButtonsRow = styled.div`

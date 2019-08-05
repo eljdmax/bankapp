@@ -1,61 +1,17 @@
-> relational models with postgresql
+> confirm when delete
 
-> modular urls/views design
-
-
-https://hackernoon.com/architecting-single-page-applications-b842ea633c2e
-
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser --username admin
-python manage.py runserver
-
-#DELETE FROM django_migrations WHERE app='bank';
-
-Proxy:
-npm config set strict-ssl false
-npm config set https-proxy http://web-proxy.bbn.hpecorp.net:8080
-npm config set proxy http://web-proxy.bbn.hpecorp.net:8080
+> handle rest api errors
 
 
-npm install -g create-react-app
-npm install --save-dev flow-bin
-npm i ramda
-npm install uuid
-npm install react-router-dom
-npm install --save styled-components
+> weapon
 
-[https://www.robinwieruch.de/react-js-windows-setup/]
-[create-react-app@2.1.5]
-   [https://facebook.github.io/create-react-app/docs/adding-flow]
-   
-   npm list -g --depth 0
-   https://www.codementor.io/blizzerand/building-forms-using-react-everything-you-need-to-know-iz3eyoq4y
+> Better UI
 
-cd tp - / npm install
-   
-   
+> design of reports section
 
-{
-  "score": 500,
-  "dmg": "34",
-  "variant": 1,
-  "activeTalent": 1,
-  "passiveTalentIds": [1,2]
-}
+> Move to phone app
 
+> auto populate form via photo using google OCR
 
-{
-  "score": 500,
-  "armor": "34",
-  "type": 1,
-  "family": 2,
-  "activeTalent": 1,
-  "passiveTalentIds": [
-    1
-  ],
-  "attributeIds": [{id:1, value},{id:2, value}],
-  "modIds":[2,2]
-}
+> Better code following Complete React Developer in 2019 by Andrei Neagoie https://www.udemy.com/complete-react-developer-zero-to-mastery/
 
-https://imgur.com/a/eO6IrWx

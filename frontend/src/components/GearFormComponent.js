@@ -206,7 +206,7 @@ export const GearFormComponent = (props: Props) => {
               </option>
             ))}
           </select>
-          <div>
+          <st.FormScrolledVal>
             {formData.internalGearAttributeList.map(
               (internalGearAttribute: InternalGearAttribute, index) => (
                 <div key={index}>
@@ -232,7 +232,7 @@ export const GearFormComponent = (props: Props) => {
                 </div>
               ),
             )}
-          </div>
+          </st.FormScrolledVal>
         </st.FormRow>
         <st.ButtonsRow>
           <st.ButtonsSection>
