@@ -22,7 +22,10 @@ export const gearRestToObj = (data: any) => {
   };
 };
 
-export const fetchAllGears = (cookies = { csrftoken: '' }) => {
+export const fetchAllGears = (
+  cookies = { csrftoken: '' },
+  updateLoadedResource: Function,
+) => {
   fetch(restURL + '/gears/', {
     method: 'GET',
     //body: JSON.stringify(userData),
@@ -38,6 +41,7 @@ export const fetchAllGears = (cookies = { csrftoken: '' }) => {
         return newGear;
       });
       gearStore.addGears(newGears);
+      if (updateLoadedResource) updateLoadedResource('allGears');
     });
   });
 
@@ -76,9 +80,9 @@ export const postUpdateGear = (
   cookies = { csrftoken: '' },
   id: number,
   gearFormData: GearFormData,
+  onSuccess: Function,
+  onFailure: Function,
 ) => {
-  let ret = { success: true, msg: '' };
-
   let url = restURL + '/gear/';
   let method = 'POST';
   if (id > 0) {
@@ -90,22 +94,27 @@ export const postUpdateGear = (
     method: method,
     body: JSON.stringify(gearFormData),
     headers: getDefaultHeaders(cookies),
-  }).then(response => {
-    response.json().then(data => {
-      fetchGear(cookies, data.id, id > 0);
+  })
+    .catch(ex => {
+      if (onFailure) onFailure(ex.toString());
+    })
+    .then(response => {
+      if (response.ok) {
+        response.json().then(data => {
+          fetchGear(cookies, data.id, id > 0);
+        });
+        if (onSuccess) onSuccess();
+      } else {
+        if (onFailure) onFailure(response.statusText);
+      }
     });
-  });
-
-  return ret;
 };
 
 export const deleteGear = (cookies = { csrftoken: '' }, gear: Gear) => {
   fetch(restURL + '/gear/' + gear.id + '/', {
     method: 'DELETE',
-    //body: JSON.stringify(gearFormData),
     headers: getDefaultHeaders(cookies),
   }).then(response => {
-    console.log('response ', response);
     if (response.status === 204) {
       gearStore.removeGear(gear);
     }

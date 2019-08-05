@@ -42,7 +42,13 @@ export const GearComponent = (props: Props) => {
             title={gear.trash === true ? 'Unmark trash' : 'Mark as trash'}
             onClick={() => toggleTrash(gear)}
           />
-          <st.TrashBtn title="Delete" onClick={() => deleteGear(gear)} />
+          <st.TrashBtn
+            title="Delete"
+            onClick={() => {
+              if (window.confirm('Are you sure you wish to delete this gear?'))
+                deleteGear(gear);
+            }}
+          />
         </st.ToolsSection>
         <st.StatusSection status={gearUiService.getStatus(gear)}>
           <st.StatusText>{gearUiService.displayStatus(gear)}</st.StatusText>

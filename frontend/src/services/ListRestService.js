@@ -18,7 +18,7 @@ import {
 
 import { getDefaultHeaders, restURL } from './RestServiceConfig';
 
-export const fetchWeaponVariants = (cookies = {'csrftoken':''}) => {
+export const fetchWeaponVariants = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/weapon/variants/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -30,7 +30,7 @@ export const fetchWeaponVariants = (cookies = {'csrftoken':''}) => {
   });
 };
 
-export const fetchWeaponActiveTalents = (cookies = {'csrftoken':''}) => {
+export const fetchWeaponActiveTalents = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/weapon/activetalents/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -42,7 +42,7 @@ export const fetchWeaponActiveTalents = (cookies = {'csrftoken':''}) => {
   });
 };
 
-export const fetchWeaponPassiveTalents = (cookies = {'csrftoken':''}) => {
+export const fetchWeaponPassiveTalents = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/weapon/passivetalents/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -54,7 +54,10 @@ export const fetchWeaponPassiveTalents = (cookies = {'csrftoken':''}) => {
   });
 };
 
-export const fetchGearTypes = (cookies = {'csrftoken':''}) => {
+export const fetchGearTypes = (
+  cookies = { csrftoken: '' },
+  updateLoadedResource: Function,
+) => {
   fetch(restURL + '/gear/types/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -63,10 +66,14 @@ export const fetchGearTypes = (cookies = {'csrftoken':''}) => {
     response.json().then(data => {
       gearTypeStore.addNameId(data);
     });
+    if (updateLoadedResource) updateLoadedResource('gearTypes');
   });
 };
 
-export const fetchGearFamilies = (cookies = {'csrftoken':''}) => {
+export const fetchGearFamilies = (
+  cookies = { csrftoken: '' },
+  updateLoadedResource: Function,
+) => {
   fetch(restURL + '/gear/families/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -75,10 +82,11 @@ export const fetchGearFamilies = (cookies = {'csrftoken':''}) => {
     response.json().then(data => {
       gearFamilyStore.addNameId(data);
     });
+    if (updateLoadedResource) updateLoadedResource('gearFamilies');
   });
 };
 
-export const fetchGearActiveTalents = (cookies = {'csrftoken':''}) => {
+export const fetchGearActiveTalents = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/gear/activetalents/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -90,7 +98,7 @@ export const fetchGearActiveTalents = (cookies = {'csrftoken':''}) => {
   });
 };
 
-export const fetchGearPassiveTalents = (cookies = {'csrftoken':''}) => {
+export const fetchGearPassiveTalents = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/gear/passivetalents/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -102,7 +110,7 @@ export const fetchGearPassiveTalents = (cookies = {'csrftoken':''}) => {
   });
 };
 
-export const fetchGearAttributes = (cookies = {'csrftoken':''}) => {
+export const fetchGearAttributes = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/gear/attributes/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -114,7 +122,7 @@ export const fetchGearAttributes = (cookies = {'csrftoken':''}) => {
   });
 };
 
-export const fetchGearAttributeTypes = (cookies = {'csrftoken':''}) => {
+export const fetchGearAttributeTypes = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/gear/attributetypes/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),
@@ -126,7 +134,7 @@ export const fetchGearAttributeTypes = (cookies = {'csrftoken':''}) => {
   });
 };
 
-export const fetchBuilds = (cookies = {'csrftoken':''}) => {
+export const fetchBuilds = (cookies = { csrftoken: '' }) => {
   fetch(restURL + '/builds/', {
     method: 'GET',
     headers: getDefaultHeaders(cookies),

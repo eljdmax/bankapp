@@ -36,7 +36,7 @@ import { internalGearModService } from '../domain/InternalGearModService';
 import { internalGearAttributeService } from '../domain/InternalGearAttributeService';
 
 import { GenericFormWrap } from '../styles/GenericForm';
-import { Modal } from '../styles/Body';
+import { Modal, Loading } from '../styles/Body';
 
 type Props = {};
 
@@ -79,6 +79,7 @@ export class GearFormContainer extends Component<Props, FormData> {
 
     this.state = {
       visible: false,
+      loading: false,
       gearId: 0,
       gearTypeList: gearTypeStore.getState(),
       gearFamilyList: gearFamilyStore.getState(),
@@ -339,32 +340,45 @@ export class GearFormContainer extends Component<Props, FormData> {
       },
     );
 
-
     const isScoreValid = this.gearService.isScoreValid(gearScore);
     const isArmorValid = this.gearService.isArmorValid(gearArmor);
     const isTypeValid = this.gearService.isTypeValid(gearType);
     const isFamilyValid = this.gearService.isFamilyValid(gearFamily);
 
     if (isScoreValid && isArmorValid && isTypeValid && isFamilyValid) {
-      let submitStatus = gearRestService.postUpdateGear(this.props.cookies.cookies, this.state.gearId, {
-        score: gearScore,
-        armor: gearArmor,
-        type: gearType,
-        family: gearFamily,
-        activeTalent: gearActiveTalent,
-        passiveTalentIds: gearPassiveTalents,
-        modIds: gearMods,
-        attributeIds: gearAttributes,
-      });
+      gearRestService.postUpdateGear(
+        this.props.cookies.cookies,
+        this.state.gearId,
+        {
+          score: gearScore,
+          armor: gearArmor,
+          type: gearType,
+          family: gearFamily,
+          activeTalent: gearActiveTalent,
+          passiveTalentIds: gearPassiveTalents,
+          modIds: gearMods,
+          attributeIds: gearAttributes,
+        },
+        () => this.onSubmitSuccess(),
+        msg => this.onSubmitFailure(msg),
+      );
 
-      if (submitStatus.success) {
-        this.closeForm();
-      } else {
-        alert('An error occured!');
-      }
+      //loading gif
+      this.setState(R.assocPath(['loading'], true));
     } else {
       this.markInvalid(isScoreValid, isArmorValid, isTypeValid, isFamilyValid);
     }
+  }
+
+  onSubmitSuccess() {
+    this.setState(R.assocPath(['loading'], false));
+    alert('Gear successfully ' + (this.state.gearId ? 'updated!' : 'added!'));
+    this.closeForm();
+  }
+
+  onSubmitFailure(msg: String) {
+    this.setState(R.assocPath(['loading'], false));
+    alert('An error occured: ' + msg);
   }
 
   clearForm() {
@@ -436,6 +450,7 @@ export class GearFormContainer extends Component<Props, FormData> {
     return (
       <Modal>
         <GenericFormWrap>
+          {this.state.loading && <Loading />}
           <GearFormComponent
             formData={this.state}
             submitForm={this.submitForm.bind(this)}

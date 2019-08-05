@@ -38,6 +38,8 @@ export class GearSettingsContainer extends Component<Props> {
   constructor(props: Props) {
     super(props);
 
+    this.modalRef = React.createRef();
+
     this.state = {
       visible: false,
       activeRow: 0,
@@ -193,6 +195,16 @@ export class GearSettingsContainer extends Component<Props> {
     }
   }
 
+  handleKeyUp(event: Event) {
+    switch (event.key) {
+      case 'Escape':
+        this.closeModal();
+        break;
+      default:
+        break;
+    }
+  }
+
   componentWillUnmount() {
     settingsViewStore.unsubscribe(this.subscriber);
     gearFamilyStore.unsubscribe(this.familySubscriber);
@@ -201,13 +213,25 @@ export class GearSettingsContainer extends Component<Props> {
     buildStore.unsubscribe(this.buildSubscriber);
   }
 
+  componentDidMount() {
+    if (this.state.visible) this.modalRef.current.focus();
+  }
+
+  componentDidUpdate() {
+    if (this.state.visible) this.modalRef.current.focus();
+  }
+
   render() {
     if (!this.state.visible) {
       return null;
     }
 
     return (
-      <Modal>
+      <Modal
+        ref={this.modalRef}
+        tabIndex="0"
+        onKeyUp={event => this.handleKeyUp(event)}
+      >
         <SettingsWrap>
           <GearSettingsComponent
             data={this.state}

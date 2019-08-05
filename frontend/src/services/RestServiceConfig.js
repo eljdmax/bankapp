@@ -2,7 +2,7 @@
 
 export const restURL = 'https://divizia.herokuapp.com/api/v1';
 
-export const getDefaultHeaders = (cookies) => {
+export const getDefaultHeaders = cookies => {
   return {
     Accept: 'application/json',
     'Content-Type': 'application/json',

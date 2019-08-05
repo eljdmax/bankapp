@@ -1,0 +1,17 @@
+> confirm when delete
+
+> handle rest api errors
+
+
+> weapon
+
+> Better UI
+
+> design of reports section
+
+> Move to phone app
+
+> auto populate form via photo using google OCR
+
+> Better code following Complete React Developer in 2019 by Andrei Neagoie https://www.udemy.com/complete-react-developer-zero-to-mastery/
+
