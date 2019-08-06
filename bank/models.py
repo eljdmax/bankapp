@@ -65,6 +65,8 @@ class Weapon(models.Model):
 	dmg = models.DecimalField(max_digits=6, decimal_places=2, null=False)
 	# is it trash
 	trash = models.BooleanField(default=False)
+	# is it star
+	star = models.BooleanField(default=False)
 	# weapon variant
 	variant = models.ForeignKey(WeaponVariant, on_delete=models.CASCADE, null=False)
 	# active talent
@@ -75,7 +77,14 @@ class Weapon(models.Model):
         through='WeaponPassiveMembership',
         through_fields=('weapon', 'talent'),
     )
-	
+
+	# builds
+	builds = models.ManyToManyField(
+		Build,
+		through='WeaponBuild',
+		through_fields=('weapon', 'build'),
+	)
+
 	def __str__(self):
 		return "Id: {} - Score: {}".format(self.id, self.score)
 		
@@ -145,6 +154,9 @@ class PassiveGearTalent(models.Model):
 	def __str__(self):
 		return "Id: {} - Name: {}".format(self.id, self.name)
 		
+class WeaponBuild(models.Model):
+	weapon = models.ForeignKey(Weapon, on_delete=models.CASCADE, null=False)
+	build = models.ForeignKey(Build, on_delete=models.CASCADE, null=False)
 
 class Gear(models.Model):
 	# id

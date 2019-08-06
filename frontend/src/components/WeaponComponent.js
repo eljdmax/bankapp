@@ -11,28 +11,52 @@ type Props = {
   weapon: Weapon,
   viewFilter: any,
   toggleTrash: Function,
+  toggleStar: Function,
   editWeapon: Function,
   deleteWeapon: Function,
+  linkWeapon: Function,
 };
 
 export const WeaponComponent = (props: Props) => {
-  const { weapon, viewFilter, toggleTrash, editWeapon, deleteWeapon } = props;
+  const {
+    weapon,
+    viewFilter,
+    toggleTrash,
+    toggleStar,
+    editWeapon,
+    deleteWeapon,
+    linkWeapon,
+  } = props;
 
   return (
     <RelativeDiv>
       <st.TopRow>
         <st.ToolsSection>
           <st.PenBtn title="Edit" onClick={() => editWeapon(weapon)} />
+          <st.LinkBtn
+            title="Link to Builds"
+            onClick={() => linkWeapon(weapon)}
+          />
+          <st.StarBtn
+            title={weapon.star === true ? 'Unmark star' : 'Mark as star'}
+            onClick={() => toggleStar(weapon)}
+          />
           <st.EjectBtn
-            title="Mark as trash"
+            title={weapon.trash === true ? 'Unmark trash' : 'Mark as trash'}
             onClick={() => toggleTrash(weapon)}
           />
-          <st.TrashBtn title="Delete" onClick={() => deleteWeapon(weapon)} />
+          <st.TrashBtn
+            title="Delete"
+            onClick={() => {
+              if (
+                window.confirm('Are you sure you wish to delete this weapon?')
+              )
+                deleteWeapon(weapon);
+            }}
+          />
         </st.ToolsSection>
-        <st.StatusSection>
-          <st.StatusText>
-            {weapon.variant.name} {weapon.score} {weapon.dmg}
-          </st.StatusText>
+        <st.StatusSection status={weaponUiService.getStatus(weapon)}>
+          <st.StatusText>{weaponUiService.displayStatus(weapon)}</st.StatusText>
         </st.StatusSection>
       </st.TopRow>
 

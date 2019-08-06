@@ -61,7 +61,6 @@ export const fetchGear = (
     response.json().then(data => {
       const newGear = gearService.createGear(gearRestToObj(data));
       if (newGear) {
-        console.log('Update? ', update);
         if (update) {
           gearStore.updateGear(newGear);
         } else {
