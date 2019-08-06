@@ -11,6 +11,11 @@ class WeaponCreateSerializer(serializers.ModelSerializer):
 		child=serializers.IntegerField(),
 		required=False
 	)
+
+	buildIds = serializers.ListField(
+		child=serializers.IntegerField(),
+		required=False
+	)
 	
 	class Meta:
 		model = Weapon
@@ -33,6 +38,10 @@ class WeaponCreateSerializer(serializers.ModelSerializer):
 		talentData = None
 		if 'passiveTalentIds' in validated_data:
 			talentData = validated_data.pop('passiveTalentIds')
+
+		weaponBuildData = None
+		if 'buildIds' in validated_data:
+			weaponBuildData = validated_data.pop('buildIds')
 		
 		instance.score = validated_data.get('score', instance.score)
 		instance.dmg = validated_data.get('dmg', instance.dmg)
@@ -41,6 +50,9 @@ class WeaponCreateSerializer(serializers.ModelSerializer):
 		if ('trash' in validated_data):
 			instance.trash = validated_data.get('trash', instance.trash)
 		
+		if ('star' in validated_data):
+			instance.star = validated_data.get('star', instance.star)
+
 		if ('activeTalent' in validated_data):
 			instance.activeTalent = validated_data.get('activeTalent', instance.activeTalent)
 
@@ -51,6 +63,12 @@ class WeaponCreateSerializer(serializers.ModelSerializer):
 				talent = PassiveWeaponTalent.objects.get(pk=k)
 				WeaponPassiveMembership.objects.create(weapon=instance, talent=talent)
 		
+		if weaponBuildData != None:
+			WeaponBuild.objects.filter(weapon=instance).delete()
+			for k in weaponBuildData:
+				build = Build.objects.get(pk=k)
+				WeaponBuild.objects.create(weapon=instance, build=build)
+
 		instance.save()
 		
 		return instance

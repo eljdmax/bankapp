@@ -28,7 +28,7 @@ export class GearContainer extends Component<Props> {
 
   toggleTrash(gear: Gear) {
     const updatedGear = this.gearService.updateTrash(gear, !gear.trash);
-    let submitStatus = gearRestService.postUpdateGear(this.props.cookies.cookies, updatedGear.id, {
+    gearRestService.postUpdateGear(this.props.cookies.cookies, updatedGear.id, {
       score: updatedGear.score,
       armor: updatedGear.armor,
       type: updatedGear.type.id,
@@ -36,15 +36,11 @@ export class GearContainer extends Component<Props> {
       trash: updatedGear.trash,
       star: updatedGear.star,
     });
-
-    if (!submitStatus.success) {
-      alert('An error occured!');
-    }
   }
 
   toggleStar(gear: Gear) {
     const updatedGear = this.gearService.updateStar(gear, !gear.star);
-    let submitStatus = gearRestService.postUpdateGear(this.props.cookies.cookies, updatedGear.id, {
+    gearRestService.postUpdateGear(this.props.cookies.cookies, updatedGear.id, {
       score: updatedGear.score,
       armor: updatedGear.armor,
       type: updatedGear.type.id,
@@ -52,14 +48,10 @@ export class GearContainer extends Component<Props> {
       trash: updatedGear.trash,
       star: updatedGear.star,
     });
-
-    if (!submitStatus.success) {
-      alert('An error occured!');
-    }
   }
 
   removeGear(gear: Gear) {
-    gearRestService.deleteGear(this.props.cookies.cookies,gear);
+    gearRestService.deleteGear(this.props.cookies.cookies, gear);
   }
 
   editGear(gear: Gear) {

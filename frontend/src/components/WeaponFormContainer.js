@@ -24,7 +24,7 @@ import { WeaponFormComponent } from './WeaponFormComponent';
 import * as weaponRestService from '../services/WeaponRestService';
 
 import { GenericFormWrap } from '../styles/GenericForm';
-import { Modal } from '../styles/Body';
+import { Modal, Loading } from '../styles/Body';
 
 type Props = {};
 
@@ -54,6 +54,7 @@ export class WeaponFormContainer extends Component<Props, FormData> {
 
     this.state = {
       visible: false,
+      loading: false,
       weaponId: 0,
       weaponVariantList: weaponVariantStore.getState(),
       weaponActiveTalentList: weaponActiveTalentStore.getState(),
@@ -206,7 +207,8 @@ export class WeaponFormContainer extends Component<Props, FormData> {
     const isVariantValid = this.weaponService.isVariantValid(weaponVariant);
 
     if (isScoreValid && isDmgValid && isVariantValid) {
-      let submitStatus = weaponRestService.postUpdateWeapon(
+      weaponRestService.postUpdateWeapon(
+        this.props.cookies.cookies,
         this.state.weaponId,
         {
           score: weaponScore,
@@ -215,16 +217,28 @@ export class WeaponFormContainer extends Component<Props, FormData> {
           activeTalent: weaponActiveTalent,
           passiveTalentIds: weaponPassiveTalents,
         },
+        () => this.onSubmitSuccess(),
+        msg => this.onSubmitFailure(msg),
       );
 
-      if (submitStatus.success) {
-        this.closeForm();
-      } else {
-        alert('An error occured!');
-      }
+      //loading gif
+      this.setState(R.assocPath(['loading'], true));
     } else {
       this.markInvalid(isScoreValid, isDmgValid, isVariantValid);
     }
+  }
+
+  onSubmitSuccess() {
+    this.setState(R.assocPath(['loading'], false));
+    alert(
+      'Weapon successfully ' + (this.state.weaponId ? 'updated!' : 'added!'),
+    );
+    this.closeForm();
+  }
+
+  onSubmitFailure(msg: String) {
+    this.setState(R.assocPath(['loading'], false));
+    alert('An error occured: ' + msg);
   }
 
   clearForm() {
@@ -283,6 +297,7 @@ export class WeaponFormContainer extends Component<Props, FormData> {
     return (
       <Modal>
         <GenericFormWrap>
+          {this.state.loading && <Loading />}
           <WeaponFormComponent
             formData={this.state}
             submitForm={this.submitForm.bind(this)}

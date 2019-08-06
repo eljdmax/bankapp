@@ -13,6 +13,34 @@ export const displayActiveTalent = (activeWeaponTalent: ActiveWeaponTalent) => {
   return activeWeaponTalent ? activeWeaponTalent.name : 'No Talent';
 };
 
+export const getStatus = (weapon: Weapon) => {
+  if (weapon.trash === true) {
+    return 'trash';
+  }
+  if (weapon.star === true) {
+    return 'star';
+  }
+  return '';
+};
+
+export const displayStatus = (weapon: Weapon) => {
+  let status: String = '';
+  status = weapon.variant.name + ' ' + weapon.score + ' ' + weapon.dmg;
+
+  if (weapon.builds.length > 0) {
+    status +=
+      ' [' +
+      weapon.builds
+        .map(build => {
+          return build.name;
+        })
+        .join(' / ') +
+      ']';
+  }
+
+  return status;
+};
+
 export const compareWeaponBy = (
   f: string[] = ['dmg'],
   asc: boolean = false,

@@ -11,12 +11,12 @@ import * as gearRestService from './services/GearRestService';
 import * as listRestService from './services/ListRestService';
 
 import { Banner } from './styles/Banner';
-import { Modal, Loading } from './styles/Body';
+import { Loading } from './styles/Body';
 import { MenuContainer } from './components/MenuContainer';
 import { LeftMenuContainer } from './components/LeftMenuContainer';
 import { SubMenuContainer } from './components/SubMenuContainer';
 import { GearSettingsContainer } from './components/GearSettingsContainer';
-import { LinkEntityContainer } from './components/LinkEntityContainer';
+import { LinkGearContainer } from './components/LinkGearContainer';
 
 import { withCookies, Cookies } from 'react-cookie';
 
@@ -42,11 +42,22 @@ class Gear extends Component<Props> {
     listRestService.fetchGearFamilies(this.props.cookies.cookies, r =>
       this.updateLoadedResource(r),
     );
-    listRestService.fetchGearAttributeTypes(this.props.cookies.cookies);
-    listRestService.fetchGearAttributes(this.props.cookies.cookies);
-    listRestService.fetchGearActiveTalents(this.props.cookies.cookies);
-    listRestService.fetchGearPassiveTalents(this.props.cookies.cookies);
-    listRestService.fetchBuilds(this.props.cookies.cookies);
+    listRestService.fetchGearAttributeTypes(this.props.cookies.cookies, r =>
+      this.updateLoadedResource(r),
+    );
+    listRestService.fetchGearAttributes(this.props.cookies.cookies, r =>
+      this.updateLoadedResource(r),
+    );
+    listRestService.fetchGearActiveTalents(this.props.cookies.cookies, r =>
+      this.updateLoadedResource(r),
+    );
+    listRestService.fetchGearPassiveTalents(this.props.cookies.cookies, r =>
+      this.updateLoadedResource(r),
+    );
+    listRestService.fetchBuilds(this.props.cookies.cookies, r =>
+      this.updateLoadedResource(r),
+    );
+
     listRestService.setYesNoStore();
     listRestService.setFilters();
   }
@@ -57,7 +68,7 @@ class Gear extends Component<Props> {
       this.totalLoaded += 1;
     }
 
-    if (this.totalLoaded > 2 && !this.state.ready) {
+    if (this.totalLoaded > 7 && !this.state.ready) {
       this.setState({ ready: true });
     }
   }
@@ -84,7 +95,7 @@ class Gear extends Component<Props> {
         <GearListContainer cookies={this.props.cookies} />
         <GearFormContainer cookies={this.props.cookies} />
         <GearSettingsContainer />
-        <LinkEntityContainer cookies={this.props.cookies} />
+        <LinkGearContainer cookies={this.props.cookies} />
       </div>
     );
   }

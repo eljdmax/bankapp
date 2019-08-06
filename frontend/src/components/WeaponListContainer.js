@@ -126,6 +126,6 @@ export class WeaponListContainer extends React.Component<Props, State> {
   }
 
   render() {
-    return <WeaponListComponent {...this.state} />;
+    return <WeaponListComponent {...this.state} cookies={this.props.cookies} />;
   }
 }

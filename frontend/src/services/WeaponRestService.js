@@ -14,10 +14,15 @@ export const weaponRestToObj = (data: any) => {
     variant: data.variant,
     activeTalent: data.activeTalent,
     passiveTalents: data.passiveTalents,
+    star: data.star,
+    builds: data.builds,
   };
 };
 
-export const fetchAllWeapons = (cookies = { csrftoken: '' }) => {
+export const fetchAllWeapons = (
+  cookies = { csrftoken: '' },
+  updateLoadedResource: Function,
+) => {
   fetch(restURL + '/weapons/', {
     method: 'GET',
     //body: JSON.stringify(userData),
@@ -36,6 +41,7 @@ export const fetchAllWeapons = (cookies = { csrftoken: '' }) => {
         return newWeapon;
       });
       weaponStore.addWeapons(newWeapons);
+      if (updateLoadedResource) updateLoadedResource('allWeapons');
     });
   });
 
@@ -55,7 +61,6 @@ export const fetchWeapon = (
     response.json().then(data => {
       const newWeapon = weaponService.createWeapon(weaponRestToObj(data));
       if (newWeapon) {
-        console.log('Update? ', update);
         if (update) {
           weaponStore.updateWeapon(newWeapon);
         } else {
@@ -74,9 +79,9 @@ export const postUpdateWeapon = (
   cookies = { csrftoken: '' },
   id: number,
   weaponFormData: WeaponFormData,
+  onSuccess: Function,
+  onFailure: Function,
 ) => {
-  let ret = { success: true, msg: '' };
-
   let url = restURL + '/weapon/';
   let method = 'POST';
   if (id > 0) {
@@ -88,22 +93,27 @@ export const postUpdateWeapon = (
     method: method,
     body: JSON.stringify(weaponFormData),
     headers: getDefaultHeaders(cookies),
-  }).then(response => {
-    response.json().then(data => {
-      fetchWeapon(cookies, data.id, id > 0);
+  })
+    .catch(ex => {
+      if (onFailure) onFailure(ex.toString());
+    })
+    .then(response => {
+      if (response.ok) {
+        response.json().then(data => {
+          fetchWeapon(cookies, data.id, id > 0);
+        });
+        if (onSuccess) onSuccess();
+      } else {
+        if (onFailure) onFailure(response.statusText);
+      }
     });
-  });
-
-  return ret;
 };
 
 export const deleteWeapon = (cookies = { csrftoken: '' }, weapon: Weapon) => {
   fetch(restURL + '/weapon/' + weapon.id + '/', {
     method: 'DELETE',
-    //body: JSON.stringify(weaponFormData),
     headers: getDefaultHeaders(cookies),
   }).then(response => {
-    console.log('response ', response);
     if (response.status === 204) {
       weaponStore.removeWeapon(weapon);
     }

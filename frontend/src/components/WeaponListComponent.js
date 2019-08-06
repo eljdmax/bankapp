@@ -14,10 +14,18 @@ type Props = {
   viewFilter: any,
   extraFilter: any,
   orderFilter: any,
+  cookies: any,
 };
 
 export const WeaponListComponent = (props: Props) => {
-  const { weapons, weaponFamily, viewFilter, extraFilter, orderFilter } = props;
+  const {
+    weapons,
+    weaponFamily,
+    viewFilter,
+    extraFilter,
+    orderFilter,
+    cookies,
+  } = props;
 
   //weapons.sort( weaponUiService.compareWeaponBy(['id'],true) );
   let filteredWeapons = weapons.filter(
@@ -56,6 +64,7 @@ export const WeaponListComponent = (props: Props) => {
             weapon={weapon}
             key={index}
             viewFilter={viewFilter}
+            cookies={cookies}
           />
         </MainRow>
       ))}

@@ -86,3 +86,5 @@ export const WeaponStoreFactory = () => {
 export const weaponStore = WeaponStoreFactory();
 
 export const weaponEditStore = WeaponStoreFactory();
+
+export const weaponLinkStore = WeaponStoreFactory();

@@ -73,7 +73,14 @@ export const LinkEntityComponent = (props: Props) => {
         </st.CategoryRow>
         <st.ButtonsRow>
           <st.ButtonsSection>
-            <st.TickBtn type="submit" title={data.gear.id ? 'Add' : 'Update'} />
+            <st.TickBtn
+              type="submit"
+              title={
+                (data.gear && data.gear.id) || (data.weapon && data.weapon.id)
+                  ? 'Add'
+                  : 'Update'
+              }
+            />
           </st.ButtonsSection>
         </st.ButtonsRow>
       </form>
